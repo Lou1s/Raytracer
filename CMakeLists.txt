@@ -13,6 +13,7 @@ include_directories(
 file(GLOB all_SRCS
     "${PROJECT_SOURCE_DIR}/include/*.h"
     "${PROJECT_SOURCE_DIR}/src/*.c"
+    "${PROJECT_SOURCE_DIR}/external/*.h"
     )
 
 add_executable(Raytracer ${all_SRCS})

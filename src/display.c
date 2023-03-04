@@ -1,6 +1,10 @@
 #include "../include/display.h"
+#define NK_IMPLEMENTATION
+#include "../external/nuklear.h"
+
 #include "GLFW/glfw3.h"
 #include <X11/Xlib.h>
+
 
 Bool initDisplay() {
     printf("initDisplay\n");

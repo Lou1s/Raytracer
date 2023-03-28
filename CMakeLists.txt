@@ -17,7 +17,7 @@ file(GLOB all_SRCS
     )
 
 add_executable(Raytracer ${all_SRCS})
-target_link_libraries(Raytracer glfw)
+target_link_libraries(Raytracer glfw -lGL -lGLU -lX11)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

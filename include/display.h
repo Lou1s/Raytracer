@@ -12,11 +12,13 @@
 
 Bool initDisplay();
 void windowSizeChangedCallback(GLFWwindow* window, int width, int height);
+void drawCanvas(Canvas *canvas);
 Bool shouldDisplayClose();
 void destroyDisplay();
 static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 static GLFWwindow *window;
+static GLuint textureHandle;
 static int screenWidth;
 static int screenHeight;
 

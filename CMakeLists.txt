@@ -4,7 +4,6 @@ project(Raytracer VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-add_subdirectory(lib/glfw)
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
@@ -13,11 +12,10 @@ include_directories(
 file(GLOB all_SRCS
     "${PROJECT_SOURCE_DIR}/include/*.h"
     "${PROJECT_SOURCE_DIR}/src/*.c"
-    "${PROJECT_SOURCE_DIR}/external/*.h"
     )
 
 add_executable(Raytracer ${all_SRCS})
-target_link_libraries(Raytracer glfw -lGL -lGLU -lX11)
+target_link_libraries(Raytracer)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

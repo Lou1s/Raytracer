@@ -1,10 +1,11 @@
 enable_testing()
-include_directories(../include)
-
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include
+)
 list(APPEND TESTS tupleTest)
-
+list(REMOVE_ITEM all_SRCS "${PROJECT_SOURCE_DIR}/src/main.c")
 foreach(TEST IN LISTS TESTS)
-    add_executable(${TEST} ${TEST}.c)
+    add_executable(${TEST} ${TEST}.c ${all_SRCS})
     add_dependencies(${TEST} ${TEST})
     add_test(${TEST} ${TEST})
     target_link_libraries(${TEST} cmocka)

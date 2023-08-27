@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../include/tuple.h"
 
 Tuple point(const float x, const float y, const float z) {
@@ -8,6 +9,10 @@ Tuple point(const float x, const float y, const float z) {
 Tuple vector(const float x, const float y, const float z) {
     Tuple v = {x, y, z, 0.0f};
     return v;
+}
+
+void printTuple(const Tuple t) {
+    printf("(%f, %f, %f, %f)", t.x, t.y, t.z, t.w);
 }
 
 bool tuplesEqual(const Tuple a, const Tuple b) {
@@ -26,4 +31,12 @@ Tuple negateTuple(const Tuple t) {
 
 Tuple subtractTuples(const Tuple a, const Tuple b) {
     return addTuples(a, negateTuple(b));
+}
+
+Tuple multTupleScalar(const Tuple t, float s) {
+    return (Tuple){t.x * s, t.y * s, t.z * s, t.w * s};
+}
+
+Tuple divideTupleScalar(const Tuple t, float s) {
+    return multTupleScalar(t, 1.0/s);
 }

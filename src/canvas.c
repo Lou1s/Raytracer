@@ -3,10 +3,19 @@
 
  Canvas* createCanvas(int width, int height) {
     // allocate space for the canvas, including the pixel buffer
-    Canvas *c = (Canvas*)malloc(sizeof(Canvas) + sizeof(uint32_t) * height * width);
-    c->height = height;
+    Canvas *c = (Canvas*)malloc(sizeof(Canvas));
+    if (c == NULL) {
+      return NULL;
+    }
+    c->width = width;
     c-> height = height;
+
     c->pixelBuffer = (uint32_t*) malloc(sizeof(uint32_t) * height * width);
+    if (c->pixelBuffer == NULL) {
+      free(c);
+      return NULL;
+    }
+
     return c;
 
  }
@@ -21,4 +30,5 @@
   void destroyCanvas(Canvas *canvas) {
     free(canvas->pixelBuffer);
     free(canvas);
+    canvas = NULL;
  }

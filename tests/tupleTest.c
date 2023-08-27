@@ -81,6 +81,20 @@ static void subtractTupleTest(void **state) {
     assert_true(tuplesEqual(expected, diff));
 }
 
+static void multTupleScalarTest(void **state) {
+    Tuple t = {1, -2, 3, -4};
+    float s = 0.5;
+    Tuple result = {0.5, -1, 1.5, -2};
+    assert_true(tuplesEqual(result, multTupleScalar(t, s)));
+}
+
+static void divideTupleScalarTest(void **state) {
+    Tuple t = {1, -2, 3, -4};
+    float s = 2;
+    Tuple result = {0.5, -1, 1.5, -2};
+    assert_true(tuplesEqual(result, divideTupleScalar(t, s)));
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(tuplePointInitTest),
@@ -90,7 +104,10 @@ int main() {
         cmocka_unit_test(tuplesEqualTest),
         cmocka_unit_test(negateTupleTest),
         cmocka_unit_test(addTupleTest),
-        cmocka_unit_test(subtractTupleTest)
+        cmocka_unit_test(subtractTupleTest),
+        cmocka_unit_test(multTupleScalarTest),
+        cmocka_unit_test(divideTupleScalarTest)
+
     };
     return cmocka_run_group_tests_name("TupleTest", tests, NULL, NULL);
 }

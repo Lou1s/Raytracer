@@ -21,4 +21,7 @@ Tuple negateTuple(const Tuple t);
 Tuple subtractTuples(const Tuple a, const Tuple b);
 Tuple multTupleScalar(const Tuple t, float s);
 Tuple divideTupleScalar (const Tuple t, float s);
+
+float vectorMagnitude(const Tuple v);
+Tuple vectorNormalise(const Tuple v);
 #endif

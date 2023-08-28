@@ -95,6 +95,30 @@ static void divideTupleScalarTest(void **state) {
     assert_true(tuplesEqual(result, divideTupleScalar(t, s)));
 }
 
+static void vectorMagnitudeTest(void **state) {
+    Tuple v = vector(1, 0, 0);
+    assert_float_equal(vectorMagnitude(v), 1.0, EPSILON);
+    
+    Tuple v1 = vector(0, 1, 0);
+    assert_float_equal(vectorMagnitude(v1), 1.0, EPSILON);
+    
+    Tuple v2 = vector(0, 0, 1);
+    assert_float_equal(vectorMagnitude(v2), 1.0, EPSILON);
+    
+    Tuple v3 = vector(1,2,3);
+    assert_float_equal(vectorMagnitude(v3), sqrt(14), EPSILON);
+    
+    Tuple v4 = vector(-1,-2,-3);
+    assert_float_equal(vectorMagnitude(v4), sqrt(14), EPSILON);
+}
+
+static void vectorNormaliseTest(void **state) {
+    Tuple v = vector(4,0,0);
+    assert_true(tuplesEqual(vectorNormalise(v), vector(1,0,0)));
+    v = vector(1,2,3);
+    assert_true(tuplesEqual(vectorNormalise(v), vector(1/sqrtf(14),2/sqrtf(14),3/sqrtf(14))));
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(tuplePointInitTest),
@@ -106,7 +130,9 @@ int main() {
         cmocka_unit_test(addTupleTest),
         cmocka_unit_test(subtractTupleTest),
         cmocka_unit_test(multTupleScalarTest),
-        cmocka_unit_test(divideTupleScalarTest)
+        cmocka_unit_test(divideTupleScalarTest),
+        cmocka_unit_test(vectorMagnitudeTest),
+        cmocka_unit_test(vectorNormaliseTest)
 
     };
     return cmocka_run_group_tests_name("TupleTest", tests, NULL, NULL);

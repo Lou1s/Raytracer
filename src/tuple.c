@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <math.h>
+
 #include "../include/tuple.h"
 
 Tuple point(const float x, const float y, const float z) {
@@ -39,4 +41,13 @@ Tuple multTupleScalar(const Tuple t, float s) {
 
 Tuple divideTupleScalar(const Tuple t, float s) {
     return multTupleScalar(t, 1.0/s);
+}
+
+float vectorMagnitude(const Tuple v) {
+    return sqrtf(v.x*v.x + v.y * v.y + v.z * v.z);
+}
+
+Tuple vectorNormalise(const Tuple v) {
+    float mag = vectorMagnitude(v);
+    return vector(v.x/mag, v.y/mag, v.z/mag);
 }

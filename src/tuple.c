@@ -43,6 +43,10 @@ Tuple divideTupleScalar(const Tuple t, float s) {
     return multTupleScalar(t, 1.0/s);
 }
 
+float dotProdVectors(const Tuple a, Tuple b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
 float vectorMagnitude(const Tuple v) {
     return sqrtf(v.x*v.x + v.y * v.y + v.z * v.z);
 }

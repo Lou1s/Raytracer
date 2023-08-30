@@ -151,6 +151,15 @@ static void dotProdVectorsTest(void **state) {
     assert_float_equal(dotProdVectors(a, b), 20.0, EPSILON);
 }
 
+static void crossProductVectorsTest(void **state) {
+    (void) state; /* unused */
+
+    Tuple a = vector(1, 2, 3);
+    Tuple b = vector(2, 3, 4);
+    assert_true(tuplesEqual(crossProductVectors(a, b), vector(-1, 2, -1)));
+    assert_true(tuplesEqual(crossProductVectors(b, a), vector(1, -2, 1)));
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(tuplePointInitTest),
@@ -165,7 +174,8 @@ int main() {
         cmocka_unit_test(divideTupleScalarTest),
         cmocka_unit_test(vectorMagnitudeTest),
         cmocka_unit_test(vectorNormaliseTest),
-        cmocka_unit_test(dotProdVectorsTest)
+        cmocka_unit_test(dotProdVectorsTest),
+        cmocka_unit_test(crossProductVectorsTest)
 
     };
     return cmocka_run_group_tests_name("TupleTest", tests, NULL, NULL);

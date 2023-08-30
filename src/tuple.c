@@ -14,7 +14,7 @@ Tuple vector(const float x, const float y, const float z) {
 }
 
 void printTuple(const Tuple t) {
-    printf("(%f, %f, %f, %f)", t.x, t.y, t.z, t.w);
+    printf("(%f, %f, %f, %f)\n", t.x, t.y, t.z, t.w);
 }
 
 bool tuplesEqual(const Tuple a, const Tuple b) {
@@ -54,4 +54,10 @@ float vectorMagnitude(const Tuple v) {
 Tuple vectorNormalise(const Tuple v) {
     float mag = vectorMagnitude(v);
     return vector(v.x/mag, v.y/mag, v.z/mag);
+}
+
+Tuple crossProductVectors(const Tuple a, const Tuple b) {
+    return vector(a.y * b.z - a.z * b.y,
+                  a.z * b.x - a.x * b.z,
+                  a.x * b.y - a.y * b.x);
 }

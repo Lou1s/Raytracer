@@ -1,6 +1,5 @@
 #include "../include/engine.h"
 
-
 #include <stdbool.h>
 #include <stdio.h>
 

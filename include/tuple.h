@@ -1,10 +1,11 @@
 #ifndef TUPLE_H
 #define TUPLE_H
 
+#include "constants.h"
+
 #include <stdbool.h>
 #include <math.h>
 
-#define EPSILON 0.000001f
 
 /* Generic Tuple data type, used as a basis for both vectors and points*/
 typedef struct Tuple {

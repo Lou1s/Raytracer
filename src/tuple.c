@@ -3,13 +3,13 @@
 
 #include "../include/tuple.h"
 
-Tuple point(const float x, const float y, const float z) {
-    Tuple p = {x, y, z, 1.0f};
+Point point(const float x, const float y, const float z) {
+    Point p = {x, y, z, 1.0f};
     return p;
 }
 
-Tuple vector(const float x, const float y, const float z) {
-    Tuple v = {x, y, z, 0.0f};
+Vector vector(const float x, const float y, const float z) {
+    Vector v = {x, y, z, 0.0f};
     return v;
 }
 
@@ -43,20 +43,20 @@ Tuple divideTupleScalar(const Tuple t, float s) {
     return multTupleScalar(t, 1.0/s);
 }
 
-float dotProdVectors(const Tuple a, Tuple b) {
+float dotProdVectors(const Vector a, Vector b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-float vectorMagnitude(const Tuple v) {
+float vectorMagnitude(const Vector v) {
     return sqrtf(v.x*v.x + v.y * v.y + v.z * v.z);
 }
 
-Tuple vectorNormalise(const Tuple v) {
+Vector vectorNormalise(const Vector v) {
     float mag = vectorMagnitude(v);
     return vector(v.x/mag, v.y/mag, v.z/mag);
 }
 
-Tuple crossProductVectors(const Tuple a, const Tuple b) {
+Vector crossProductVectors(const Vector a, const Vector b) {
     return vector(a.y * b.z - a.z * b.y,
                   a.z * b.x - a.x * b.z,
                   a.x * b.y - a.y * b.x);

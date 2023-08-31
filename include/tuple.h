@@ -9,11 +9,11 @@
 /* Generic Tuple data type, used as a basis for both vectors and points*/
 typedef struct Tuple {
     float x,y,z,w;
- } Tuple;
+ } Tuple, Vector, Point;
 
 /* Constructors for vectors (Tuple) {x, y, z, 0.0} and points (Tuple) {x, y, z, 1.0}*/
-Tuple point(const float x, const float y, const float z);
-Tuple vector(const float x, const float y, const float z);
+Point point(const float x, const float y, const float z);
+Vector vector(const float x, const float y, const float z);
 
 /* Helper function(s) for debugging*/
 void printTuple(const Tuple t);
@@ -28,13 +28,13 @@ Tuple negateTuple(const Tuple t);
 Tuple subtractTuples(const Tuple a, const Tuple b);
 Tuple multTupleScalar(const Tuple t, float s);
 Tuple divideTupleScalar (const Tuple t, float s);
-Tuple crossProductVectors(const Tuple a, const Tuple b);
-float dotProdVectors(const Tuple a, Tuple b);
+Vector crossProductVectors(const Vector a, const Vector b);
+float dotProdVectors(const Vector a, Vector b);
 
 /* Vector magnitute and normalise functions. Operates under the premise that the input is a vector 
 i.e. the w component of the tuple is completely ignored. vectorNormalise also returns a vector, 
 deliberately setting w to 0.0. */
-float vectorMagnitude(const Tuple v);
-Tuple vectorNormalise(const Tuple v);
+float vectorMagnitude(const Vector v);
+Vector vectorNormalise(const Vector v);
 
 #endif

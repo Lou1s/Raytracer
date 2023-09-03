@@ -12,10 +12,15 @@ Canvas *c = (Canvas*)malloc(sizeof(Canvas));
     c-> height = height;
 
 // Allocate the pixel buffer, if this fails free the canvas and return NULL
-    c->pixelBuffer = malloc(sizeof(Colour) * height * width);
-    if (c->pixelBuffer == NULL) {
+    c->pixel_buffer = malloc(sizeof(Colour) * height * width);
+    if (c->pixel_buffer == NULL) {
         free(c);
         return NULL;
+    }
+    
+    Colour black = {0.0, 0.0, 0.0};
+    for (int i = 0; i < c->width * c->height; i++) {
+        c->pixel_buffer[i] = black;
     }
 
     return c;
@@ -26,11 +31,15 @@ void drawPixel(const int x, const int y, const Colour colour, Canvas *canvas) {
         return;
     }
 
-    canvas->pixelBuffer[canvas->width * y + x] = colour;
+    canvas->pixel_buffer[canvas->width * y + x] = colour;
+}
+
+Colour getPixel(const int x, const int y, Canvas *canvas) {
+    return canvas->pixel_buffer[canvas->width * y + x];
 }
 
 void destroyCanvas(Canvas *canvas) {
-    free(canvas->pixelBuffer);
+    free(canvas->pixel_buffer);
     free(canvas);
     canvas = NULL;
 }

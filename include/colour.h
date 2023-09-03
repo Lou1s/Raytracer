@@ -19,4 +19,7 @@ Colour subtractColours(const Colour a, const Colour b);
 Colour multColours(const Colour a, const Colour b);
 bool coloursEqual(const Colour a, const Colour b);
 
+/* Debugging function*/
+void printColour(const Colour);
+
 #endif

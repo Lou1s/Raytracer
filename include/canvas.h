@@ -14,6 +14,6 @@ typedef struct Canvas {
 Canvas* createCanvas(int width, int height);
 void drawPixel(const int x, const int y, const Colour colour, Canvas *canvas);
 Colour getPixel(const int x, const int y, Canvas *canvas);
-void destroyCanvas(Canvas *canvas);
+void destroyCanvas(Canvas **canvas);
 
 #endif /* CANVAS_H */

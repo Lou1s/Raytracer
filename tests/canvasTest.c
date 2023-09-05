@@ -20,7 +20,7 @@ void createCanvasTest( void **state) {
         Colour black = {0.0, 0.0, 0.0};
         assert_true(coloursEqual(black, c->pixel_buffer[i]));
     }
-    destroyCanvas(c);
+    destroyCanvas(&c);
 }
 
 void drawPixelGetPixelTest(void **state) {
@@ -31,14 +31,14 @@ void drawPixelGetPixelTest(void **state) {
     drawPixel(2, 1, col, c);
     assert_true(coloursEqual(col, c->pixel_buffer[c->width * 1 + 2]));
     assert_true(coloursEqual(c->pixel_buffer[c->width * 1 + 2], getPixel(2, 1, c)));
-    destroyCanvas(c);
+    destroyCanvas(&c);
 }
 
 void destroyCanvasTest( void **state) {
     (void) state; /* unused */
 
     Canvas *c = createCanvas(10, 20);
-    destroyCanvas(c);
+    destroyCanvas(&c);
     assert_null(c);
 }
 

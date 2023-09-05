@@ -27,7 +27,7 @@ Canvas *c = (Canvas*)malloc(sizeof(Canvas));
 }
 
 void drawPixel(const int x, const int y, const Colour colour, Canvas *canvas) {
-    if (x > 0 || x > canvas->width || y < 0 || y > canvas->height) {
+    if (x < 0 || x >= canvas->width || y < 0 || y >= canvas->height) {
         return;
     }
 
@@ -38,8 +38,8 @@ Colour getPixel(const int x, const int y, Canvas *canvas) {
     return canvas->pixel_buffer[canvas->width * y + x];
 }
 
-void destroyCanvas(Canvas *canvas) {
-    free(canvas->pixel_buffer);
-    free(canvas);
-    canvas = NULL;
+void destroyCanvas(Canvas **canvas) {
+    free((*canvas)->pixel_buffer);
+    free(*canvas);
+    *canvas = NULL;
 }

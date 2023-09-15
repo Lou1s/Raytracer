@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
+#include <stdlib.h>
 
 void createCanvasTest( void **state) {
     (void) state; /* unused */
@@ -42,11 +43,39 @@ void destroyCanvasTest( void **state) {
     assert_null(c);
 }
 
+void canvasToPpmTest(void **state) {
+    (void) state; /* unused */
+    
+    const char *ppm = "P3\n"
+                      "5 3\n"
+                      "255\n"
+                      "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
+                      "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n"
+                      "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n";
+
+    Canvas *c = createCanvas(5, 3);
+    Colour c1 = (Colour) {1.5, 0.0, 0.0};
+    Colour c2 = (Colour) {0.0, 0.5, 0.0};
+    Colour c3 = (Colour) {-0.5, 0.0, 1.0};
+
+    drawPixel(0, 0, c1, c);
+    drawPixel(2,1, c2, c);
+    drawPixel(4,2, c3, c);
+
+    char *canv_to_ppm = canvasToPpm(c);
+    assert_string_equal(canv_to_ppm, ppm);
+
+    destroyCanvas(&c);
+    free(canv_to_ppm);
+
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createCanvasTest),
         cmocka_unit_test(drawPixelGetPixelTest),
-        cmocka_unit_test(destroyCanvasTest)
+        cmocka_unit_test(destroyCanvasTest),
+        cmocka_unit_test(canvasToPpmTest)
 
     };
     return cmocka_run_group_tests_name("canvasTest", tests, NULL, NULL);

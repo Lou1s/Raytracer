@@ -1,7 +1,10 @@
 #include "../include/canvas.h"
+#include "colour.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 # define MAX_COL_VAL 255
 # define PPM_TYPE "P3"
@@ -33,6 +36,7 @@ Canvas *c = (Canvas*)malloc(sizeof(Canvas));
 
 void drawPixel(const int x, const int y, const Colour colour, Canvas *canvas) {
     if (x < 0 || x >= canvas->width || y < 0 || y >= canvas->height) {
+        printf("Draw pixel failed\n");
         return;
     }
 
@@ -41,6 +45,20 @@ void drawPixel(const int x, const int y, const Colour colour, Canvas *canvas) {
 
 Colour getPixel(const int x, const int y, Canvas *canvas) {
     return canvas->pixel_buffer[canvas->width * y + x];
+}
+
+static float clamp(const float val, const float min, const float max){
+    if (val > max) {
+        return max;
+    }
+
+    else if (val < min) {
+        return min;
+    }
+
+    else {
+        return val;
+    }
 }
 
 char* canvasToPpm(Canvas *c) {
@@ -52,43 +70,38 @@ char* canvasToPpm(Canvas *c) {
     // There's three of these per colour and we will have width * height amount of colours so
     // We should allocate a buffer of 3 * 4 * width * height chars
     // TODO: get the amount of digits in MAC_COL_VAL and use this + 1 instead of hardcoded 3 value
-    size_t buffer_size =  header_size + sizeof(char) * 4 * 3 * c->width * c->height;
-    
+    size_t buffer_size =  header_size + sizeof(char) * 4 * 3 * c->width * c->height + 1;
     // Alocate the char buffer to hold the ppm contents
     char *buffer = malloc(buffer_size);
     if (buffer == NULL) {
         return NULL;
     }
-    buffer += snprintf(buffer, header_size, header, PPM_TYPE, c->width, c->height, MAX_COL_VAL);
+
+    char *buffer_ptr = buffer +sprintf(buffer, header, PPM_TYPE, c->width, c->height, MAX_COL_VAL);
     for (int y = 0; y < c->height; y++) {
         for (int x = 0; x < c->width; x++) {
             Colour col = getPixel(x, y, c);
-            int r = (int) col.red * MAX_COL_VAL;
-            int g = (int) col.green * MAX_COL_VAL;
-            int b = (int) col.blue * MAX_COL_VAL;
+            int r = round(clamp(col.red * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
+            int g = round(clamp(col.green * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
+            int b = round(clamp(col.blue * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
             
-            int col_ptr_size = sprintf(buffer, "%d, %d, %d", r, g, b);
+            int col_ptr_size = sprintf(buffer_ptr, "%d %d %d", r, g, b);
             if(col_ptr_size == -1) {
                 return NULL;
             }
 
-            buffer += col_ptr_size;
-            if (x == c->width - 1) {
-                int newline_ptr_size = sprintf(buffer, "\n");
-                if (newline_ptr_size == -1) {
-                    return NULL;
-                }
-                buffer += newline_ptr_size;
-
-            }
+            buffer_ptr += col_ptr_size;
+            *buffer_ptr++ = (x == c->width - 1) ? '\n' : ' ';
         }
+        
     }
+    *buffer_ptr = '\0';
     return buffer;
 }
 
-bool ppmToFile(char *path, char *content) {
+// bool ppmToFile(char *path, char *content) {
 
-}
+// }
 
 
 void destroyCanvas(Canvas **canvas) {
@@ -96,3 +109,4 @@ void destroyCanvas(Canvas **canvas) {
     free(*canvas);
     *canvas = NULL;
 }
+

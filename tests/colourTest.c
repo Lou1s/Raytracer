@@ -1,4 +1,5 @@
 #include "../include/colour.h"
+#include "constants.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -44,12 +45,27 @@ void multColoursTest(void **state) {
     assert_true(coloursEqual(multColours(a,b), result));
 }
 
+void getRGBByIndexTest(void **state) {
+    (void) state; /* unused */
+
+    Colour col = (Colour) {0.25, 0.3, 0.99};
+    float r = getRGBByIndex(col , 0);
+    float g = getRGBByIndex(col , 1);
+    float b = getRGBByIndex(col , 2);
+
+    assert_float_equal(r, col.red, EPSILON);
+    assert_float_equal(g, col.green, EPSILON);
+    assert_float_equal(b, col.blue, EPSILON);
+
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(coloursEqualTest),
         cmocka_unit_test(addColoursTest),
         cmocka_unit_test(subtractColoursTest),
-        cmocka_unit_test(multColoursTest)
+        cmocka_unit_test(multColoursTest),
+        cmocka_unit_test(getRGBByIndexTest)
     };
     return cmocka_run_group_tests_name("ColourTest", tests, NULL, NULL);
 }

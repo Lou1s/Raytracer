@@ -18,6 +18,7 @@ Colour addColours(const Colour a, const Colour b);
 Colour subtractColours(const Colour a, const Colour b);
 Colour multColours(const Colour a, const Colour b);
 bool coloursEqual(const Colour a, const Colour b);
+float getRGBByIndex(const Colour, const int i);
 
 /* Debugging function*/
 void printColour(const Colour);

@@ -1,5 +1,6 @@
 #include "../include/colour.h"
 
+# include <assert.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -16,6 +17,15 @@ Colour subtractColours(const Colour a, const Colour b) {
 }
 Colour multColours(const Colour a, const Colour b) {
     return (Colour) {a.red * b.red, a.green * b.green, a.blue * b.blue};
+}
+
+float getRGBByIndex(const Colour col, const int i) {
+    switch(i) {
+        case 0: return col.red;
+        case 1: return col.green;
+        case 2: return col.blue;
+    }
+    assert(0);
 }
 
 void printColour(const Colour col) {

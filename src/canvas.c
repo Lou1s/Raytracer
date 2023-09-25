@@ -22,7 +22,7 @@ Canvas *c = (Canvas*)malloc(sizeof(Canvas));
     c->width = width;
     c-> height = height;
 
-// Allocate the pixel buffer, if this fails free the canvas and return NULL
+    // Allocate the pixel buffer, if this fails free the canvas and return NULL
     c->pixel_buffer = malloc(sizeof(Colour) * height * width);
     if (c->pixel_buffer == NULL) {
         free(c);
@@ -69,11 +69,11 @@ char* canvasToPpm(Canvas *c) {
     // Get header size
     size_t header_size = sizeof(char) * snprintf(NULL, 0, header, PPM_TYPE, c->width, c->height, 
             MAX_COL_VAL);
-    // For each r,g and b component of a colour we will need 4 chars (3 numbers and 1 space).
+    // For each r,g and b component of a colour we will need MAX_COLOUR_SIZE + 1 chars.
     // There's three of these per colour and we will have width * height amount of colours so
     // We should allocate a buffer of 3 * 4 * width * height chars
-    // TODO: get the amount of digits in MAC_COL_VAL and use this + 1 instead of hardcoded 3 value
-    size_t buffer_size =  header_size + sizeof(char) * 4 * 3 * c->width * c->height + 1;
+
+    size_t buffer_size =  header_size + sizeof(char) * (MAX_COLOUR_SIZE + 1) * 3 * c->width * c->height + 1;
     // Alocate the char buffer to hold the ppm contents
     char *buffer = malloc(buffer_size);
     if (buffer == NULL) {
@@ -101,7 +101,7 @@ char* canvasToPpm(Canvas *c) {
                     *buffer_ptr++ = '\n';
                 }
                 // If we're not at the start of a newline then add a space
-                else if (!(i == 0 && x == 0)) {
+                else if (!(*(buffer_ptr -1) == '\n')) {
                     line_size += 1;
                     *buffer_ptr++ = ' ';
                 }
@@ -113,12 +113,9 @@ char* canvasToPpm(Canvas *c) {
                 buffer_ptr += col_val_to_buffer_size;
                 line_size += col_val_to_buffer_size;
             }
-            // Add a newline if we are at the end of the row
-            if (x == c->width - 1) {
-                *buffer_ptr++ = '\n';
-                line_size = 0;
-            }
         }
+        // Add a newline at the end of the row
+        *buffer_ptr++ = '\n';
     }
     *buffer_ptr = '\0';
     return buffer;

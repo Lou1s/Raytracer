@@ -18,4 +18,5 @@ Colour getPixel(const int x, const int y, Canvas *canvas);
 char* canvasToPpm(Canvas *c);
 void destroyCanvas(Canvas **canvas);
 
+
 #endif /* CANVAS_H */

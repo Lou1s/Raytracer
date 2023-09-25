@@ -67,7 +67,30 @@ void canvasToPpmTest(void **state) {
 
     destroyCanvas(&c);
     free(canv_to_ppm);
+}
 
+void ppmLineLengthTest(void **state) {
+    (void) state; /* unused */
+
+    const char *ppm = "P3\n"
+                      "10 2\n"
+                      "255\n"
+                      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n"
+                      "153 255 204 153 255 204 153 255 204 153 255 204 153\n"
+                      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n"
+                      "153 255 204 153 255 204 153 255 204 153 255 204 153\n";
+    
+    Colour col = (Colour) {1, 0.8, 0.6};
+    Canvas *c = createCanvas(10, 2);
+    for (int y = 0; y < c->height; y++) {
+        for (int x = 0; x < c->width; x++) {
+            drawPixel(x, y, col, c);
+        }
+    }
+    char *canv_to_ppm = canvasToPpm(c);
+    assert_string_equal(canv_to_ppm, ppm);
+    destroyCanvas(&c);
+    free(canv_to_ppm);
 }
 
 int main() {
@@ -75,8 +98,10 @@ int main() {
         cmocka_unit_test(createCanvasTest),
         cmocka_unit_test(drawPixelGetPixelTest),
         cmocka_unit_test(destroyCanvasTest),
-        cmocka_unit_test(canvasToPpmTest)
+        cmocka_unit_test(canvasToPpmTest),
+        cmocka_unit_test(ppmLineLengthTest)
 
     };
     return cmocka_run_group_tests_name("canvasTest", tests, NULL, NULL);
 }
+

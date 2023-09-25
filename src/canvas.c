@@ -6,7 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+// PPM Constants
 # define MAX_COL_VAL 255
+# define MAX_COLOUR_SIZE (int) floor(log10(MAX_COL_VAL)) + 1 // Should this be a macro?
+# define MAX_PPM_LINE 70
 # define PPM_TYPE "P3"
 
 Canvas* createCanvas(int width, int height) {
@@ -77,23 +80,45 @@ char* canvasToPpm(Canvas *c) {
         return NULL;
     }
 
-    char *buffer_ptr = buffer +sprintf(buffer, header, PPM_TYPE, c->width, c->height, MAX_COL_VAL);
+    char *buffer_ptr = buffer + sprintf(buffer, header, PPM_TYPE, c->width, c->height, MAX_COL_VAL);
     for (int y = 0; y < c->height; y++) {
+        int line_size = 0;
         for (int x = 0; x < c->width; x++) {
             Colour col = getPixel(x, y, c);
-            int r = round(clamp(col.red * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
-            int g = round(clamp(col.green * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
-            int b = round(clamp(col.blue * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
-            
-            int col_ptr_size = sprintf(buffer_ptr, "%d %d %d", r, g, b);
-            if(col_ptr_size == -1) {
-                return NULL;
-            }
+            // Add each R, G, B value individually to see if we have exceeded the max line limit
+            for (int i = 0; i < 3; i++) {
+                char col_val_buff[MAX_COLOUR_SIZE + 1];
+                float col_val = getRGBByIndex(col, i);
+                int ppm_col_val = round(clamp(col_val * MAX_COL_VAL, 0.0, (float) MAX_COL_VAL));
+                
+                int col_val_size = sprintf(col_val_buff, "%d", ppm_col_val);
+                if (col_val_size == -1) {
+                    return NULL;
+                }
+                // Add a newline if we hit the max line size allowed
+                if (line_size + col_val_size >= MAX_PPM_LINE) {
+                    line_size = 0;
+                    *buffer_ptr++ = '\n';
+                }
+                // If we're not at the start of a newline then add a space
+                else if (!(i == 0 && x == 0)) {
+                    line_size += 1;
+                    *buffer_ptr++ = ' ';
+                }
 
-            buffer_ptr += col_ptr_size;
-            *buffer_ptr++ = (x == c->width - 1) ? '\n' : ' ';
+                int col_val_to_buffer_size = sprintf(buffer_ptr, "%s", col_val_buff);
+                if (col_val_to_buffer_size == -1) {
+                    return NULL;
+                }
+                buffer_ptr += col_val_to_buffer_size;
+                line_size += col_val_to_buffer_size;
+            }
+            // Add a newline if we are at the end of the row
+            if (x == c->width - 1) {
+                *buffer_ptr++ = '\n';
+                line_size = 0;
+            }
         }
-        
     }
     *buffer_ptr = '\0';
     return buffer;

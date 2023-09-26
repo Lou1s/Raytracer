@@ -93,13 +93,46 @@ void ppmLineLengthTest(void **state) {
     free(canv_to_ppm);
 }
 
+void savePPMToFileTest(void **state) {
+    (void) state; /* unused */
+
+    char test_ppm_file_path[] = "/tmp/test_ppm.ppm";
+    Colour col = (Colour) {1, 0.8, 0.6};
+    Canvas *c = createCanvas(10, 2);
+    for (int y = 0; y < c->height; y++) {
+        for (int x = 0; x < c->width; x++) {
+            drawPixel(x, y, col, c);
+        }
+    }
+
+    char *canv_to_ppm = canvasToPpm(c);
+    destroyCanvas(&c);
+    savePPMToFile(test_ppm_file_path, canv_to_ppm);
+    
+    char *buffer = NULL;
+    FILE *fp = fopen(test_ppm_file_path, "r");
+    fseek(fp, 0, SEEK_END);
+    int size = ftell(fp);
+    rewind(fp);
+    buffer = malloc((size + 1));
+    fread(buffer, 1, size, fp);
+    fclose(fp);
+    buffer[size] = '\0';
+
+    assert_string_equal(buffer, canv_to_ppm);
+    free(buffer);
+    free(canv_to_ppm);
+
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createCanvasTest),
         cmocka_unit_test(drawPixelGetPixelTest),
         cmocka_unit_test(destroyCanvasTest),
         cmocka_unit_test(canvasToPpmTest),
-        cmocka_unit_test(ppmLineLengthTest)
+        cmocka_unit_test(ppmLineLengthTest),
+        cmocka_unit_test(savePPMToFileTest)
 
     };
     return cmocka_run_group_tests_name("canvasTest", tests, NULL, NULL);

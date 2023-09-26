@@ -121,10 +121,20 @@ char* canvasToPpm(Canvas *c) {
     return buffer;
 }
 
-// bool ppmToFile(char *path, char *content) {
+bool savePPMToFile(const char file_path[], char *ppm_contents) {
+    FILE *fp = fopen(file_path, "w");
+    if (fp == NULL) {
+        return false;
+    }
 
-// }
-
+    int write_results = fputs(ppm_contents, fp);
+    fclose(fp);
+    if (write_results == EOF) {
+        return false;
+    }
+    
+    return true;
+}
 
 void destroyCanvas(Canvas **canvas) {
     free((*canvas)->pixel_buffer);

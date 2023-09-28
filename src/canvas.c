@@ -14,7 +14,7 @@
 
 Canvas* createCanvas(int width, int height) {
 // Allocate space for the canvas, return NULL if this fails
-Canvas *c = (Canvas*)malloc(sizeof(Canvas));
+Canvas *c = malloc(sizeof(Canvas));
     if (c == NULL) {
         return NULL;
     }

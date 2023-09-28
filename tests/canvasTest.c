@@ -97,8 +97,8 @@ void savePPMToFileTest(void **state) {
     (void) state; /* unused */
 
     char test_ppm_file_path[] = "/tmp/test_ppm.ppm";
-    Colour col = (Colour) {1, 0.8, 0.6};
-    Canvas *c = createCanvas(10, 2);
+    Colour col = (Colour) {1, 0.0, 0.0};
+    Canvas *c = createCanvas(900, 550);
     for (int y = 0; y < c->height; y++) {
         for (int x = 0; x < c->width; x++) {
             drawPixel(x, y, col, c);

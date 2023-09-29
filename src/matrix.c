@@ -23,9 +23,15 @@ Matrix* createMatrix(const int rows, const int columns) {
     return m;
 }
 
-float* getMAtrixCell(Matrix *m, int column, int row) {
+float* getMatrixCell(Matrix *m, int row, int column) {
     if (row >= m->rows || row < 0 || column >= m->columns || column < 0) {
         return NULL;
     }
     return &m->data[row*m->columns + column];
+}
+
+void destroyMatrix(Matrix **m) {
+    free((*m)->data);
+    free(*m);
+    *m = NULL;
 }

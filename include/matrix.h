@@ -9,6 +9,8 @@ typedef struct Matrix{
 
 Matrix* createMatrix(const int rows, const int columns);
 float* getMatrixCell(Matrix *m, int row, int column);
+bool matricesEqual(Matrix *m1, Matrix *m2);
 void destroyMatrix(Matrix **m);
+
 
 # endif

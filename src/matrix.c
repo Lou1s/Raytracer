@@ -1,6 +1,9 @@
+#include <math.h>
 #include <stdlib.h>
 
-# include "../include/matrix.h"
+#include "../include/matrix.h"
+#include "../include/constants.h"
+
 
 Matrix* createMatrix(const int rows, const int columns) {
     if (rows <= 0 || columns <= 0) {
@@ -28,6 +31,21 @@ float* getMatrixCell(Matrix *m, int row, int column) {
         return NULL;
     }
     return &m->data[row*m->columns + column];
+}
+
+bool matricesEqual(Matrix *m1, Matrix *m2) {
+    if (m1->rows != m2->rows || m1->columns != m2->columns) {
+        return false;
+    }
+    for (int y = 0; y < m1->columns; y++) {
+        for (int x = 0; x < m1->rows; x++) {
+            if (fabs(*getMatrixCell(m1, x, y)) - fabs(*getMatrixCell(m2, x, y)) > EPSILON) {
+                return false;
+            }
+        }
+    }
+    return true;
+    
 }
 
 void destroyMatrix(Matrix **m) {

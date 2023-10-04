@@ -69,12 +69,110 @@ void getMatrixCellTest_2(void **state) {
     destroyMatrix(&m);
 }
 
+void matricesEqualTest(void **state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix(4, 4);
+    *getMatrixCell(m, 0, 0) = 1.0;
+    *getMatrixCell(m, 0, 1) = 2.0;
+    *getMatrixCell(m, 0, 2) = 3.0;
+    *getMatrixCell(m, 0, 3) = 4.0;
+    *getMatrixCell(m, 1, 0) = 5.0;
+    *getMatrixCell(m, 1, 1) = 6.0;
+    *getMatrixCell(m, 1, 2) = 7.0;
+    *getMatrixCell(m, 1, 3) = 8.0;
+    *getMatrixCell(m, 2, 0) = 9.0;
+    *getMatrixCell(m, 2, 1) = 8.0;
+    *getMatrixCell(m, 2, 2) = 7.0;
+    *getMatrixCell(m, 2, 3) = 6.0;
+    *getMatrixCell(m, 3, 0) = 5.0;
+    *getMatrixCell(m, 3, 1) = 4.0;
+    *getMatrixCell(m, 3, 2) = 3.0;
+    *getMatrixCell(m, 3, 3) = 2.0;
+
+    Matrix *m1 = createMatrix(4, 4);
+    *getMatrixCell(m1, 0, 0) = 1.0;
+    *getMatrixCell(m1, 0, 1) = 2.0;
+    *getMatrixCell(m1, 0, 2) = 3.0;
+    *getMatrixCell(m1, 0, 3) = 4.0;
+    *getMatrixCell(m1, 1, 0) = 5.0;
+    *getMatrixCell(m1, 1, 1) = 6.0;
+    *getMatrixCell(m1, 1, 2) = 7.0;
+    *getMatrixCell(m1, 1, 3) = 8.0;
+    *getMatrixCell(m1, 2, 0) = 9.0;
+    *getMatrixCell(m1, 2, 1) = 8.0;
+    *getMatrixCell(m1, 2, 2) = 7.0;
+    *getMatrixCell(m1, 2, 3) = 6.0;
+    *getMatrixCell(m1, 3, 0) = 5.0;
+    *getMatrixCell(m1, 3, 1) = 4.0;
+    *getMatrixCell(m1, 3, 2) = 3.0;
+    *getMatrixCell(m1, 3, 3) = 2.0;
+
+    assert_true(matricesEqual(m, m1));
+
+    destroyMatrix(&m);
+    destroyMatrix(&m1);
+}
+
+void matricesNotEqualTest(void **state) {
+    (void) state; /* unused */
+
+    Matrix *m1 = createMatrix(4, 4);
+    *getMatrixCell(m1, 0, 0) = 1.0;
+    *getMatrixCell(m1, 0, 1) = 2.0;
+    *getMatrixCell(m1, 0, 2) = 3.0;
+    *getMatrixCell(m1, 0, 3) = 4.0;
+    *getMatrixCell(m1, 1, 0) = 5.0;
+    *getMatrixCell(m1, 1, 1) = 6.0;
+    *getMatrixCell(m1, 1, 2) = 7.0;
+    *getMatrixCell(m1, 1, 3) = 8.0;
+    *getMatrixCell(m1, 2, 0) = 9.0;
+    *getMatrixCell(m1, 2, 1) = 8.0;
+    *getMatrixCell(m1, 2, 2) = 7.0;
+    *getMatrixCell(m1, 2, 3) = 6.0;
+    *getMatrixCell(m1, 3, 0) = 5.0;
+    *getMatrixCell(m1, 3, 1) = 4.0;
+    *getMatrixCell(m1, 3, 2) = 3.0;
+    *getMatrixCell(m1, 3, 3) = 2.0;
+
+    Matrix *m2 = createMatrix(4, 4);
+    *getMatrixCell(m2, 0, 0) = 2.0;
+    *getMatrixCell(m2, 0, 1) = 3.0;
+    *getMatrixCell(m2, 0, 2) = 4.0;
+    *getMatrixCell(m2, 0, 3) = 5.0;
+    *getMatrixCell(m2, 1, 0) = 6.0;
+    *getMatrixCell(m2, 1, 1) = 7.0;
+    *getMatrixCell(m2, 1, 2) = 8.0;
+    *getMatrixCell(m2, 1, 3) = 9.0;
+    *getMatrixCell(m2, 2, 0) = 8.0;
+    *getMatrixCell(m2, 2, 1) = 7.0;
+    *getMatrixCell(m2, 2, 2) = 6.0;
+    *getMatrixCell(m2, 2, 3) = 5.0;
+    *getMatrixCell(m2, 3, 0) = 4.0;
+    *getMatrixCell(m2, 3, 1) = 3.0;
+    *getMatrixCell(m2, 3, 2) = 2.0;
+    *getMatrixCell(m2, 3, 3) = 1.0;
+
+    assert_false(matricesEqual(m1, m2));
+    destroyMatrix(&m1);
+    destroyMatrix(&m2);
+
+    Matrix *m3 = createMatrix(2, 1);
+    Matrix *m4 = createMatrix(1, 2);
+    assert_false(matricesEqual(m3, m4));
+
+    destroyMatrix(&m3);
+    destroyMatrix(&m4);
+
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
         cmocka_unit_test(getMatrixCellTest_1),
-        cmocka_unit_test(getMatrixCellTest_2)
-
+        cmocka_unit_test(getMatrixCellTest_2),
+        cmocka_unit_test(matricesEqualTest),
+        cmocka_unit_test(matricesNotEqualTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

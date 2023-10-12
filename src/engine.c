@@ -8,12 +8,16 @@
 
 static Canvas *canvas;
 
-void engineInit(int width, int height) {
+int engineInit(int width, int height) {
     canvas = createCanvas(width, height);
+    if (canvas == NULL) {
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
-void engineMainLoop() {
-     
+int engineMainLoop() {
+     return EXIT_SUCCESS;
 }
 
 

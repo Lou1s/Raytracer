@@ -4,8 +4,8 @@
 #include "canvas.h"
 #include <stdbool.h>
 
-void engineInit(int width, int height);
-void engineMainLoop();
+int engineInit(int width, int height);
+int engineMainLoop();
 void engineDestroy();
 
 #endif /* ENGINE_H */

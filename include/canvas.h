@@ -16,7 +16,7 @@ void drawPixel(const int x, const int y, const Colour colour, Canvas *canvas);
 Colour getPixel(const int x, const int y, Canvas *canvas);
 
 char* canvasToPpm(Canvas *c);
-bool savePPMToFile(const char file_path[], char *ppm_contents);
+int savePPMToFile(const char file_path[], char *ppm_contents);
 void destroyCanvas(Canvas **canvas);
 
 

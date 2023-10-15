@@ -1,6 +1,4 @@
 # Raytracer
 Just a simple raytracer built for learning purposes. I will be building this using 'The Ray Tracer Challenge' written by Jamis Buck.
 
-Current progress: Simple vector and points library (the generic 'Tuples' data type in the book) has been implemented. The next step is to create a canvas. I have had a simple guess of what is needed here but have not started properly.
-
-I will include broad documentation in each header file, detailing like-minded functions and operators. For more complex functions and data structures I will add detailed comments into the implemntation (so far this has not been needed).
+Current progress: Simple vector and points library (the generic 'Tuples' data type in the book) has been implemented along with some basic canvas and colour functionality. I'm just getting into the Matrix stuff now and have done multiplication and  a few things around that. Currently the matrix struct and functionality is a bit generalised (supporting matrices of any dimensions), I'm debating whether or not to lock it down solely to 4x4 matrices, but will leave it as is for now.

@@ -1,8 +1,10 @@
+#include <assert.h>
 #include <math.h>
 #include <stdlib.h>
 
 #include "../include/matrix.h"
 #include "../include/constants.h"
+#include "tuple.h"
 
 
 Matrix* createMatrix(const int rows, const int columns) {
@@ -65,6 +67,37 @@ Matrix* multMatrix(Matrix *m1, Matrix *m2) {
     }
     return mult_result;
 }
+
+static Matrix* TupleToMat(Vector v) {
+    Matrix *m = createMatrix(4, 1);
+    *getMatrixCell(m, 0, 0) = v.x;
+    *getMatrixCell(m, 1, 0) = v.y;
+    *getMatrixCell(m, 2, 0) = v.z;
+    *getMatrixCell(m, 3, 0) = v.w;
+
+    return m;
+}
+
+static Tuple matToTuple(Matrix *m) {
+    assert(m->columns == 1 && m->rows == 4);
+    Vector v = (Tuple) {*getMatrixCell(m, 0, 0), *getMatrixCell(m, 1, 0), *getMatrixCell(m, 2, 0), 
+            *getMatrixCell(m, 3, 0)};
+    return v;
+}
+
+Tuple matTupleMult(Matrix *m, const Tuple v) {
+    /*Convert the vector to a 4x1 matrix and perform matrix mult.*/
+    Matrix *mat_tup = TupleToMat(v);
+    Matrix *mult_res = multMatrix(m, mat_tup);
+    if (mult_res == NULL) {
+        abort();
+    }
+    Tuple result = matToTuple(mult_res);
+    destroyMatrix(&mat_tup);
+    destroyMatrix(&mult_res);
+    return result;    
+}
+
 
 void destroyMatrix(Matrix **m) {
     free((*m)->data);

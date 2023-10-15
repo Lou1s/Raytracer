@@ -1,5 +1,6 @@
 #include "../include/matrix.h"
 #include "constants.h"
+#include "tuple.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -233,6 +234,35 @@ void multMatrixTest(void **state) {
     destroyMatrix(&m4);
 }
 
+void matTupleMultTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix(4, 4);
+    *getMatrixCell(m, 0, 0) = 1.0;
+    *getMatrixCell(m, 0, 1) = 2.0;
+    *getMatrixCell(m, 0, 2) = 3.0;
+    *getMatrixCell(m, 0, 3) = 4.0;
+    *getMatrixCell(m, 1, 0) = 2.0;
+    *getMatrixCell(m, 1, 1) = 4.0;
+    *getMatrixCell(m, 1, 2) = 4.0;
+    *getMatrixCell(m, 1, 3) = 2.0;
+    *getMatrixCell(m, 2, 0) = 8.0;
+    *getMatrixCell(m, 2, 1) = 6.0;
+    *getMatrixCell(m, 2, 2) = 4.0;
+    *getMatrixCell(m, 2, 3) = 1.0;
+    *getMatrixCell(m, 3, 0) = 0.0;
+    *getMatrixCell(m, 3, 1) = 0.0;
+    *getMatrixCell(m, 3, 2) = 0.0;
+    *getMatrixCell(m, 3, 3) = 1.0;
+
+    Tuple t = {1.0, 2.0, 3.0, 1.0};
+    Tuple res = matTupleMult(m, t);
+    Tuple correct_res = {18.0, 24.0, 33.0, 1.0};
+
+    assert_true(tuplesEqual(res, correct_res));
+    
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
@@ -240,7 +270,8 @@ int main() {
         cmocka_unit_test(getMatrixCellTest_2),
         cmocka_unit_test(matricesEqualTest),
         cmocka_unit_test(matricesNotEqualTest),
-        cmocka_unit_test(multMatrixTest)
+        cmocka_unit_test(multMatrixTest),
+        cmocka_unit_test(matTupleMultTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

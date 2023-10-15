@@ -166,7 +166,7 @@ void matricesNotEqualTest(void **state) {
 
 }
 
-void testMultMatrix(void **state) {
+void multMatrixTest(void **state) {
     (void) state; /* unused */
 
     Matrix *m1 = createMatrix(4, 4);
@@ -192,7 +192,7 @@ void testMultMatrix(void **state) {
     *getMatrixCell(m2, 0, 1) = 1.0;
     *getMatrixCell(m2, 0, 2) = 2.0;
     *getMatrixCell(m2, 0, 3) = 3.0;
-    *getMatrixCell(m2, 1, 0) = 4.0;
+    *getMatrixCell(m2, 1, 0) = 3.0;
     *getMatrixCell(m2, 1, 1) = 2.0;
     *getMatrixCell(m2, 1, 2) = 1.0;
     *getMatrixCell(m2, 1, 3) = -1.0;
@@ -209,7 +209,7 @@ void testMultMatrix(void **state) {
 
     Matrix *m4 = createMatrix(4, 4);
     *getMatrixCell(m4, 0, 0) = 20.0;
-    *getMatrixCell(m4, 0, 1) =22.0;
+    *getMatrixCell(m4, 0, 1) = 22.0;
     *getMatrixCell(m4, 0, 2) = 50.0;
     *getMatrixCell(m4, 0, 3) = 48.0;
     *getMatrixCell(m4, 1, 0) = 44.0;
@@ -239,7 +239,8 @@ int main() {
         cmocka_unit_test(getMatrixCellTest_1),
         cmocka_unit_test(getMatrixCellTest_2),
         cmocka_unit_test(matricesEqualTest),
-        cmocka_unit_test(matricesNotEqualTest)
+        cmocka_unit_test(matricesNotEqualTest),
+        cmocka_unit_test(multMatrixTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

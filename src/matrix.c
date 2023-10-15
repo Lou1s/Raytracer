@@ -48,6 +48,24 @@ bool matricesEqual(Matrix *m1, Matrix *m2) {
     
 }
 
+Matrix* multMatrix(Matrix *m1, Matrix *m2) {
+    if (m1->columns != m2->rows) {
+        return NULL;
+    }
+
+    Matrix *mult_result = createMatrix(m1->rows, m2->columns);
+    for (int x = 0; x < m1->rows; x++) {
+        for (int y = 0; y < m2->columns; y++) {
+            *getMatrixCell(mult_result, x, y) = 0;
+            for (int i = 0; i < m2->rows; i++) {
+                *getMatrixCell(mult_result, x, y) += (*getMatrixCell(m1, x, i)) * 
+                        (*getMatrixCell(m2, i, y));
+            }
+        }
+    }
+    return mult_result;
+}
+
 void destroyMatrix(Matrix **m) {
     free((*m)->data);
     free(*m);

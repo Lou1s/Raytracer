@@ -14,6 +14,8 @@ float* getMatrixCell(Matrix *m, int row, int column);
 bool matricesEqual(Matrix *m1, Matrix *m2);
 Matrix* multMatrix(Matrix *m1, Matrix *m2);
 Tuple matTupleMult(Matrix *m, const Tuple v);
+
+Matrix* getIdentityMatrix(int rows, int columns);
 void destroyMatrix(Matrix **m);
 
 

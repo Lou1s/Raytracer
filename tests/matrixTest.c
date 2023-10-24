@@ -263,6 +263,31 @@ void matTupleMultTest(void ** state) {
     
 }
 
+void identityMatrixTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix(4, 4);
+    *getMatrixCell(m, 0, 0) = 1.0;
+    *getMatrixCell(m, 0, 1) = 2.0;
+    *getMatrixCell(m, 0, 2) = 3.0;
+    *getMatrixCell(m, 0, 3) = 4.0;
+    *getMatrixCell(m, 1, 0) = 2.0;
+    *getMatrixCell(m, 1, 1) = 4.0;
+    *getMatrixCell(m, 1, 2) = 4.0;
+    *getMatrixCell(m, 1, 3) = 2.0;
+    *getMatrixCell(m, 2, 0) = 8.0;
+    *getMatrixCell(m, 2, 1) = 6.0;
+    *getMatrixCell(m, 2, 2) = 4.0;
+    *getMatrixCell(m, 2, 3) = 1.0;
+    *getMatrixCell(m, 3, 0) = 0.0;
+    *getMatrixCell(m, 3, 1) = 0.0;
+    *getMatrixCell(m, 3, 2) = 0.0;
+    *getMatrixCell(m, 3, 3) = 1.0;
+
+    Matrix *i = getIdentityMatrix(4,4);
+    assert_true(matricesEqual(multMatrix(m, i), m));
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
@@ -271,7 +296,8 @@ int main() {
         cmocka_unit_test(matricesEqualTest),
         cmocka_unit_test(matricesNotEqualTest),
         cmocka_unit_test(multMatrixTest),
-        cmocka_unit_test(matTupleMultTest)
+        cmocka_unit_test(matTupleMultTest),
+        cmocka_unit_test(identityMatrixTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

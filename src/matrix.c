@@ -70,6 +70,9 @@ Matrix* multMatrix(Matrix *m1, Matrix *m2) {
 
 static Matrix* TupleToMat(Vector v) {
     Matrix *m = createMatrix(4, 1);
+    if (m == NULL) {
+        return NULL;
+    }
     *getMatrixCell(m, 0, 0) = v.x;
     *getMatrixCell(m, 1, 0) = v.y;
     *getMatrixCell(m, 2, 0) = v.z;
@@ -89,6 +92,7 @@ Tuple matTupleMult(Matrix *m, const Tuple v) {
     /*Convert the vector to a 4x1 matrix and perform matrix mult.*/
     Matrix *mat_tup = TupleToMat(v);
     Matrix *mult_res = multMatrix(m, mat_tup);
+    // TODO: ERROR CHECK RESULTS (matrix pointer != NULL)
     if (mult_res == NULL) {
         abort();
     }
@@ -98,6 +102,21 @@ Tuple matTupleMult(Matrix *m, const Tuple v) {
     return result;    
 }
 
+Matrix* getIdentityMatrix(int rows, int columns) {
+    Matrix *identity_matrix = createMatrix(rows, columns);
+    if (identity_matrix==NULL) {
+        return NULL;
+    }
+
+    for (int x=0; x < rows; x++) {
+        for (int y=0; y < columns; y++) {
+            if (x==y){
+                *getMatrixCell(identity_matrix, x, y) = 1.0;
+            }
+        }
+    }
+    return identity_matrix;
+}
 
 void destroyMatrix(Matrix **m) {
     free((*m)->data);

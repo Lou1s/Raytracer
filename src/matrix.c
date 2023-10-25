@@ -102,14 +102,14 @@ Tuple matTupleMult(Matrix *m, const Tuple v) {
     return result;    
 }
 
-Matrix* getIdentityMatrix(int rows, int columns) {
-    Matrix *identity_matrix = createMatrix(rows, columns);
+Matrix* getIdentityMatrix(int size) {
+    Matrix *identity_matrix = createMatrix(size, size);
     if (identity_matrix==NULL) {
         return NULL;
     }
 
-    for (int x=0; x < rows; x++) {
-        for (int y=0; y < columns; y++) {
+    for (int x=0; x < size; x++) {
+        for (int y=0; y < size; y++) {
             if (x==y){
                 *getMatrixCell(identity_matrix, x, y) = 1.0;
             }

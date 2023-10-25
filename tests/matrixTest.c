@@ -284,7 +284,7 @@ void identityMatrixTest(void ** state) {
     *getMatrixCell(m, 3, 2) = 0.0;
     *getMatrixCell(m, 3, 3) = 1.0;
 
-    Matrix *i = getIdentityMatrix(4,4);
+    Matrix *i = getIdentityMatrix(4);
     assert_true(matricesEqual(multMatrix(m, i), m));
 
     destroyMatrix(&m);
@@ -335,6 +335,17 @@ void transposeMatrixTest(void ** state) {
     assert_true(matricesEqual(t_m, m_t));
 }
 
+void transposeIdentityTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *ident = getIdentityMatrix(10);
+    Matrix *transposed_ident = transposeMatrix(ident);
+    assert_true(matricesEqual(ident, transposed_ident));
+
+    destroyMatrix(&ident);
+    destroyMatrix(&transposed_ident);
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
@@ -345,7 +356,8 @@ int main() {
         cmocka_unit_test(multMatrixTest),
         cmocka_unit_test(matTupleMultTest),
         cmocka_unit_test(identityMatrixTest),
-        cmocka_unit_test(transposeMatrixTest)
+        cmocka_unit_test(transposeMatrixTest),
+        cmocka_unit_test(transposeIdentityTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

@@ -118,6 +118,16 @@ Matrix* getIdentityMatrix(int rows, int columns) {
     return identity_matrix;
 }
 
+Matrix* transposeMatrix(Matrix *m) {
+    Matrix *transpose_matrix = createMatrix(m->rows, m->columns);
+    for (int x = 0; x < m->rows; x++) {
+        for (int y = 0; y < m->columns; y++) {
+            *getMatrixCell(transpose_matrix, y, x) = *getMatrixCell(m, x, y);
+        }
+    }
+    return transpose_matrix;
+}
+
 void destroyMatrix(Matrix **m) {
     free((*m)->data);
     free(*m);

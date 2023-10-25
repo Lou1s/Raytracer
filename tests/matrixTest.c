@@ -286,6 +286,53 @@ void identityMatrixTest(void ** state) {
 
     Matrix *i = getIdentityMatrix(4,4);
     assert_true(matricesEqual(multMatrix(m, i), m));
+
+    destroyMatrix(&m);
+    destroyMatrix(&i);
+}
+
+void transposeMatrixTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix(4, 4);
+    *getMatrixCell(m, 0, 0) = 0.0;
+    *getMatrixCell(m, 0, 1) = 9.0;
+    *getMatrixCell(m, 0, 2) = 3.0;
+    *getMatrixCell(m, 0, 3) = 0.0;
+    *getMatrixCell(m, 1, 0) = 9.0;
+    *getMatrixCell(m, 1, 1) = 8.0;
+    *getMatrixCell(m, 1, 2) = 0.0;
+    *getMatrixCell(m, 1, 3) = 8.0;
+    *getMatrixCell(m, 2, 0) = 1.0;
+    *getMatrixCell(m, 2, 1) = 8.0;
+    *getMatrixCell(m, 2, 2) = 5.0;
+    *getMatrixCell(m, 2, 3) = 3.0;
+    *getMatrixCell(m, 3, 0) = 0.0;
+    *getMatrixCell(m, 3, 1) = 0.0;
+    *getMatrixCell(m, 3, 2) = 5.0;
+    *getMatrixCell(m, 3, 3) = 8.0;
+
+    Matrix *t_m = transposeMatrix(m);
+
+    Matrix *m_t = createMatrix(4, 4);
+    *getMatrixCell(m_t, 0, 0) = 0.0;
+    *getMatrixCell(m_t, 0, 1) = 9.0;
+    *getMatrixCell(m_t, 0, 2) = 1.0;
+    *getMatrixCell(m_t, 0, 3) = 0.0;
+    *getMatrixCell(m_t, 1, 0) = 9.0;
+    *getMatrixCell(m_t, 1, 1) = 8.0;
+    *getMatrixCell(m_t, 1, 2) = 8.0;
+    *getMatrixCell(m_t, 1, 3) = 0.0;
+    *getMatrixCell(m_t, 2, 0) = 3.0;
+    *getMatrixCell(m_t, 2, 1) = 0.0;
+    *getMatrixCell(m_t, 2, 2) = 5.0;
+    *getMatrixCell(m_t, 2, 3) = 5.0;
+    *getMatrixCell(m_t, 3, 0) = 0.0;
+    *getMatrixCell(m_t, 3, 1) = 8.0;
+    *getMatrixCell(m_t, 3, 2) = 3.0;
+    *getMatrixCell(m_t, 3, 3) = 8.0;
+
+    assert_true(matricesEqual(t_m, m_t));
 }
 
 int main() {
@@ -297,7 +344,8 @@ int main() {
         cmocka_unit_test(matricesNotEqualTest),
         cmocka_unit_test(multMatrixTest),
         cmocka_unit_test(matTupleMultTest),
-        cmocka_unit_test(identityMatrixTest)
+        cmocka_unit_test(identityMatrixTest),
+        cmocka_unit_test(transposeMatrixTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

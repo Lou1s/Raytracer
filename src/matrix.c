@@ -135,6 +135,21 @@ static float getDeterminant2x2(Matrix *m) {
             *getMatrixCell(m, 0, 1) * *getMatrixCell(m, 1, 0);
 }
 
+static Matrix* getSubMatrix(Matrix *m, int row, int column)  {
+    Matrix *sub_matrix = createMatrix(m->rows - 1, m->columns -1);
+    if (sub_matrix == NULL) {
+        return NULL;
+    }
+    int sub_row, sub_col;
+    for (int x = 0; x < sub_matrix->rows; x++) {
+        sub_row = (x < sub_row) ? x: x + 1;
+        for (int y = 0; y < sub_matrix->rows; y++) {
+            sub_col = (y < sub_row) ? y: y + 1;
+            *getMatrixCell(sub_matrix, x, y) = *getMatrixCell(m, sub_row, sub_col);
+        }
+    }
+    return sub_matrix;
+}
 
 void destroyMatrix(Matrix **m) {
     free((*m)->data);

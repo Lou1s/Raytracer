@@ -17,6 +17,7 @@ Tuple matTupleMult(Matrix *m, const Tuple v);
 
 Matrix* getIdentityMatrix(int size);
 Matrix* transposeMatrix(Matrix *m);
+
 void destroyMatrix(Matrix **m);
 
 

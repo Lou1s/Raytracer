@@ -128,6 +128,14 @@ Matrix* transposeMatrix(Matrix *m) {
     return transpose_matrix;
 }
 
+static float getDeterminant2x2(Matrix *m) {
+    assert (m->rows == 2 && m->columns != 2);
+
+    return *getMatrixCell(m, 0, 0) * *getMatrixCell(m, 1, 1) + 
+            *getMatrixCell(m, 0, 1) * *getMatrixCell(m, 1, 0);
+}
+
+
 void destroyMatrix(Matrix **m) {
     free((*m)->data);
     free(*m);

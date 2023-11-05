@@ -1,47 +1,25 @@
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../include/matrix.h"
 #include "../include/constants.h"
 #include "tuple.h"
 
-
-Matrix* createMatrix(const int rows, const int columns) {
-    if (rows <= 0 || columns <= 0) {
-        return NULL;
-    }
+Matrix* createMatrix() {
     Matrix *m = malloc(sizeof(Matrix));
     if (m == NULL) {
         return NULL;
     }
-
-    m->rows = rows;
-    m-> columns = columns;
-    // Allocate the matrix data, setting it all to 0;
-    int size = rows * columns;
-    m->data = calloc(size, size * sizeof(float));
-    if (m->data == 0) {
-        free(m);
-        return NULL;
-    }
+    memset(m->data, 0.0, sizeof(m->data));
     return m;
 }
 
-float* getMatrixCell(Matrix *m, int row, int column) {
-    if (row >= m->rows || row < 0 || column >= m->columns || column < 0) {
-        return NULL;
-    }
-    return &m->data[row*m->columns + column];
-}
-
-bool matricesEqual(Matrix *m1, Matrix *m2) {
-    if (m1->rows != m2->rows || m1->columns != m2->columns) {
-        return false;
-    }
-    for (int y = 0; y < m1->columns; y++) {
-        for (int x = 0; x < m1->rows; x++) {
-            if (fabs(*getMatrixCell(m1, x, y)) - fabs(*getMatrixCell(m2, x, y)) > EPSILON) {
+bool matricesEqual(const Matrix *m1, const Matrix *m2) {
+    for (int y = 0; y < MAT_SIZE; y++) {
+        for (int x = 0; x < MAT_SIZE; x++) {
+            if (fabs(m1->data[x][y]) - fabs(m2->data[x][y]) > EPSILON) {
                 return false;
             }
         }
@@ -50,109 +28,104 @@ bool matricesEqual(Matrix *m1, Matrix *m2) {
     
 }
 
-Matrix* multMatrix(Matrix *m1, Matrix *m2) {
-    if (m1->columns != m2->rows) {
+Matrix* multMatrix(const Matrix *m1, const Matrix *m2) {
+    Matrix *mult_result = createMatrix();
+    if (mult_result == NULL) {
         return NULL;
     }
-
-    Matrix *mult_result = createMatrix(m1->rows, m2->columns);
-    for (int x = 0; x < m1->rows; x++) {
-        for (int y = 0; y < m2->columns; y++) {
-            *getMatrixCell(mult_result, x, y) = 0;
-            for (int i = 0; i < m2->rows; i++) {
-                *getMatrixCell(mult_result, x, y) += (*getMatrixCell(m1, x, i)) * 
-                        (*getMatrixCell(m2, i, y));
+    for (int x = 0; x < MAT_SIZE; x++) {
+        for (int y = 0; y < MAT_SIZE; y++) {
+            for (int i = 0; i < MAT_SIZE; i++) {
+                mult_result->data[x][y] += m1->data[x][i] * m2->data[i][y];
             }
         }
     }
     return mult_result;
 }
 
-static Matrix* TupleToMat(Vector v) {
-    Matrix *m = createMatrix(4, 1);
-    if (m == NULL) {
-        return NULL;
+/* Helper functions for letting us loop through a vector/tuple */
+static float* getTupleValByIndex(Tuple *t, const int index) {
+    switch(index) {
+        case 0: return &t->x;
+        case 1: return &t->y;
+        case 2: return &t->z;
+        case 3: return &t->w;
     }
-    *getMatrixCell(m, 0, 0) = v.x;
-    *getMatrixCell(m, 1, 0) = v.y;
-    *getMatrixCell(m, 2, 0) = v.z;
-    *getMatrixCell(m, 3, 0) = v.w;
-
-    return m;
+    assert(0);
 }
 
-static Tuple matToTuple(Matrix *m) {
-    assert(m->columns == 1 && m->rows == 4);
-    Vector v = (Tuple) {*getMatrixCell(m, 0, 0), *getMatrixCell(m, 1, 0), *getMatrixCell(m, 2, 0), 
-            *getMatrixCell(m, 3, 0)};
-    return v;
-}
-
-Tuple matTupleMult(Matrix *m, const Tuple v) {
-    /*Convert the vector to a 4x1 matrix and perform matrix mult.*/
-    Matrix *mat_tup = TupleToMat(v);
-    Matrix *mult_res = multMatrix(m, mat_tup);
-    // TODO: ERROR CHECK RESULTS (matrix pointer != NULL)
-    if (mult_res == NULL) {
-        abort();
+Tuple matTupleMult(const Matrix *m, Tuple v) {
+    Tuple result = {0.0, 0.0, 0.0, 0.0};
+    for (int i = 0; i < MAT_SIZE; i++) {
+        for (int y = 0; y < MAT_SIZE; y++) {
+            *getTupleValByIndex(&result, i) += m->data[i][y] * (*getTupleValByIndex(&v, y));
+        }
     }
-    Tuple result = matToTuple(mult_res);
-    destroyMatrix(&mat_tup);
-    destroyMatrix(&mult_res);
     return result;    
 }
 
-Matrix* getIdentityMatrix(int size) {
-    Matrix *identity_matrix = createMatrix(size, size);
+Matrix* getIdentityMatrix() {
+    Matrix *identity_matrix = createMatrix();
     if (identity_matrix==NULL) {
         return NULL;
     }
 
-    for (int x=0; x < size; x++) {
-        for (int y=0; y < size; y++) {
+    for (int x=0; x < MAT_SIZE; x++) {
+        for (int y=0; y < MAT_SIZE; y++) {
             if (x==y){
-                *getMatrixCell(identity_matrix, x, y) = 1.0;
+                identity_matrix->data[x][y] = 1.0;
             }
         }
     }
     return identity_matrix;
 }
 
-Matrix* transposeMatrix(Matrix *m) {
-    Matrix *transpose_matrix = createMatrix(m->rows, m->columns);
-    for (int x = 0; x < m->rows; x++) {
-        for (int y = 0; y < m->columns; y++) {
-            *getMatrixCell(transpose_matrix, y, x) = *getMatrixCell(m, x, y);
+Matrix* transposeMatrix(const Matrix *m) {
+    Matrix *transpose_matrix = createMatrix();
+    if (transpose_matrix == NULL) {
+        return NULL;
+    }
+    for (int x = 0; x < MAT_SIZE; x++) {
+        for (int y = 0; y < MAT_SIZE; y++) {
+            transpose_matrix->data[y][x] = m->data[x][y];
         }
     }
     return transpose_matrix;
 }
 
-static float getDeterminant2x2(Matrix *m) {
-    assert (m->rows == 2 && m->columns != 2);
-
-    return *getMatrixCell(m, 0, 0) * *getMatrixCell(m, 1, 1) + 
-            *getMatrixCell(m, 0, 1) * *getMatrixCell(m, 1, 0);
+static float getDeterminantMat3(const float mat2[3][3]) {
+    return (mat2[0][0] * mat2[1][1] * mat2[2][2]) + (mat2[0][1] * mat2[1][2] * mat2[2][0]) + 
+           (mat2[0][2] * mat2[1][0] * mat2[2][1]) - (mat2[0][0] * mat2[1][2] * mat2[2][1]) - 
+           (mat2[0][1] * mat2[1][0] * mat2[2][2]) - (mat2[0][2] * mat2[1][1] * mat2[2][0]) ;
 }
 
-static Matrix* getSubMatrix(Matrix *m, int row, int column)  {
-    Matrix *sub_matrix = createMatrix(m->rows - 1, m->columns -1);
-    if (sub_matrix == NULL) {
-        return NULL;
-    }
+/*Helper function for producing a sub matrix of size 3x3. Result is passed via input param 
+sub_matrix*/
+static void getSubMatrix(const Matrix *m, int row, int column, float sub_matrix[3][3])  {
+
     int sub_row, sub_col;
-    for (int x = 0; x < sub_matrix->rows; x++) {
-        sub_row = (x < sub_row) ? x: x + 1;
-        for (int y = 0; y < sub_matrix->rows; y++) {
-            sub_col = (y < sub_row) ? y: y + 1;
-            *getMatrixCell(sub_matrix, x, y) = *getMatrixCell(m, sub_row, sub_col);
+    for (int x = 0; x < 3; x++) {
+        sub_row = (x < row) ? x: x + 1;
+        for (int y = 0; y < 3; y++) {
+            sub_col = (y < column) ? y: y + 1;
+            sub_matrix[x][y] = m->data[sub_row][sub_col];
         }
     }
-    return sub_matrix;
+}
+
+float getDeterminant(const Matrix *m) {
+    float determinant = 0.0;
+    float sign = 1.0;
+    for (int i = 0; i < MAT_SIZE; i++) {
+        sign = (i + 1 % 2 == 0) ? -1.0 : 1.0;
+        float sub_mat[3][3];
+        getSubMatrix(m, i, i, sub_mat);
+        determinant += sign * m->data[0][i] * getDeterminantMat3(sub_mat);
+    }
+    return determinant;
 }
 
 void destroyMatrix(Matrix **m) {
-    free((*m)->data);
     free(*m);
     *m = NULL;
 }

@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -117,9 +118,9 @@ float getDeterminant(const Matrix *m) {
     float determinant = 0.0;
     float sign = 1.0;
     for (int i = 0; i < MAT_SIZE; i++) {
-        sign = (i + 1 % 2 == 0) ? -1.0 : 1.0;
+        sign = ((i + 1) % 2 == 0) ? -1.0 : 1.0;
         float sub_mat[3][3];
-        getSubMatrix(m, i, i, sub_mat);
+        getSubMatrix(m, 0, i, sub_mat);
         determinant += sign * m->data[0][i] * getDeterminantMat3(sub_mat);
     }
     return determinant;

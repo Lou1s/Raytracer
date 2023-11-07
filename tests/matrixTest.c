@@ -328,6 +328,56 @@ void transposeIdentityTest(void ** state) {
     destroyMatrix(&transposed_ident);
 }
 
+void getDeterminantTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix();
+    m->data[0][0] = 6.0;
+    m->data[0][1] = 4.0;
+    m->data[0][2] = 4.0;
+    m->data[0][3] = 4.0;
+    m->data[1][0] = 5.0;
+    m->data[1][1] = 5.0;
+    m->data[1][2] = 7.0;
+    m->data[1][3] = 6.0;
+    m->data[2][0] = 4.0;
+    m->data[2][1] = -9.0;
+    m->data[2][2] = 3.0;
+    m->data[2][3] = -7.0;
+    m->data[3][0] = 9.0;
+    m->data[3][1] = 1.0;
+    m->data[3][2] = 7.0;
+    m->data[3][3] = -6.0;
+
+    assert_float_equal(getDeterminant(m), -2120.0, EPSILON);
+    destroyMatrix(&m);
+}
+
+void nonInvertibleDeterminantTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix();
+    m->data[0][0] = -4.0;
+    m->data[0][1] = 2.0;
+    m->data[0][2] = -2.0;
+    m->data[0][3] = -2.0;
+    m->data[1][0] = 9.0;
+    m->data[1][1] = 6.0;
+    m->data[1][2] = 2.0;
+    m->data[1][3] = 6.0;
+    m->data[2][0] = 0.0;
+    m->data[2][1] = -5.0;
+    m->data[2][2] = 1.0;
+    m->data[2][3] = -5.0;
+    m->data[3][0] = 0.0;
+    m->data[3][1] = 0.0;
+    m->data[3][2] = 0.0;
+    m->data[3][3] = 0.0;
+
+    assert_float_equal(getDeterminant(m), -0.0, EPSILON);
+    destroyMatrix(&m);
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
@@ -338,7 +388,9 @@ int main() {
         cmocka_unit_test(matTupleMultTest),
         cmocka_unit_test(identityMatrixTest),
         cmocka_unit_test(transposeMatrixTest),
-        cmocka_unit_test(transposeIdentityTest)
+        cmocka_unit_test(transposeIdentityTest),
+        cmocka_unit_test(getDeterminantTest),
+        cmocka_unit_test(nonInvertibleDeterminantTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

@@ -462,7 +462,8 @@ void inverseMatrixTest(void ** state) {
     res->data[3][2] = -0.300752;
     res->data[3][3] = 0.306391;
 
-    assert_true(matricesEqual(inverseMatrix(m), res));
+    Matrix *inv = inverseMatrix(m);
+    assert_true(matricesEqual(inv, res));
     destroyMatrix(&m);
     destroyMatrix(&res);
 

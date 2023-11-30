@@ -17,6 +17,15 @@ Matrix* createMatrix() {
     return m;
 }
 
+Mat3* createMat3() {
+    Mat3 *m3 = malloc(sizeof(Mat3));
+    if (m3 == NULL) {
+        return NULL;
+    }
+    memset(m3->data, 0.0, sizeof(m3->data));
+    return m3;
+}
+
 bool matricesEqual(const Matrix *m1, const Matrix *m2) {
     for (int y = 0; y < MAT_SIZE; y++) {
         for (int x = 0; x < MAT_SIZE; x++) {
@@ -93,37 +102,68 @@ Matrix* transposeMatrix(const Matrix *m) {
     }
     return transpose_matrix;
 }
-
-static float getDeterminantMat3(const float mat2[3][3]) {
-    return (mat2[0][0] * mat2[1][1] * mat2[2][2]) + (mat2[0][1] * mat2[1][2] * mat2[2][0]) + 
-           (mat2[0][2] * mat2[1][0] * mat2[2][1]) - (mat2[0][0] * mat2[1][2] * mat2[2][1]) - 
-           (mat2[0][1] * mat2[1][0] * mat2[2][2]) - (mat2[0][2] * mat2[1][1] * mat2[2][0]) ;
+/* Helper function to quickly compute a Mat3 determinant. Hard coded as it was just easier*/
+static float getDeterminantMat3(const Mat3 *m3) {
+    return (m3->data[0][0] * m3->data[1][1] * m3->data[2][2]) + (m3->data[0][1] * m3->data[1][2] * m3->data[2][0]) + 
+           (m3->data[0][2] * m3->data[1][0] * m3->data[2][1]) - (m3->data[0][0] * m3->data[1][2] * m3->data[2][1]) - 
+           (m3->data[0][1] * m3->data[1][0] * m3->data[2][2]) - (m3->data[0][2] * m3->data[1][1] * m3->data[2][0]) ;
 }
 
-/*Helper function for producing a sub matrix of size 3x3. Result is passed via input param 
-sub_matrix*/
-static void getSubMatrix(const Matrix *m, int row, int column, float sub_matrix[3][3])  {
-
+/*Helper function for producing a sub matrix of size 3x3. */
+static Mat3* getSubMatrix(const Matrix *m, int row, int column)  {
+    Mat3 *sub_matrix = createMat3();
     int sub_row, sub_col;
     for (int x = 0; x < 3; x++) {
         sub_row = (x < row) ? x: x + 1;
         for (int y = 0; y < 3; y++) {
             sub_col = (y < column) ? y: y + 1;
-            sub_matrix[x][y] = m->data[sub_row][sub_col];
+            sub_matrix->data[x][y] = m->data[sub_row][sub_col];
         }
     }
+    return sub_matrix;
+}
+
+float getCofactor(const Matrix *m, const int row, const int column) {
+    Mat3 *sub_mat = getSubMatrix(m, row, column);
+    assert(sub_mat != NULL);
+
+    float sub_mat_det = getDeterminantMat3(sub_mat);
+    destroyMat3(&sub_mat);
+    // Compute cofactor sign (+/-). Add two to get rid of 0 index for row and col
+    float sign = ((row + column + 2) % 2 == 0) ? 1.0 : -1.0;
+    return sign * sub_mat_det;    
 }
 
 float getDeterminant(const Matrix *m) {
     float determinant = 0.0;
-    float sign = 1.0;
     for (int i = 0; i < MAT_SIZE; i++) {
-        sign = ((i + 1) % 2 == 0) ? -1.0 : 1.0;
-        float sub_mat[3][3];
-        getSubMatrix(m, 0, i, sub_mat);
-        determinant += sign * m->data[0][i] * getDeterminantMat3(sub_mat);
+        determinant += m->data[0][i] * getCofactor(m, 0, i);
     }
     return determinant;
+}
+
+Matrix* inverseMatrix(const Matrix *m) {
+    float det = getDeterminant(m);
+    // Non zero determinant means we can't invert.
+    if floatEqual(det, 0.0) {
+        return NULL;
+    }
+    Matrix *inverse = createMatrix();
+    if (inverse == NULL) {
+        return NULL;
+    }
+    for (int x = 0; x < MAT_SIZE - 1; x++) {
+        for (int y = 0; y < MAT_SIZE - 1; y++) {
+            float cofactor = getCofactor(m, x, y);
+            inverse->data[y][x] = cofactor/det;
+        }
+    }
+    return inverse;
+}
+
+void destroyMat3(Mat3 **m3) {
+    free(*m3);
+    *m3 = NULL;
 }
 
 void destroyMatrix(Matrix **m) {

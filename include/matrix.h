@@ -4,10 +4,15 @@
 #include "tuple.h"
 
 #define MAT_SIZE 4
+#define MAT3_SIZE 3 // Obvious but why not
 
 typedef struct Matrix{
     float data[MAT_SIZE][MAT_SIZE];
 } Matrix;
+
+typedef struct Mat3{
+    float data[MAT3_SIZE][MAT3_SIZE];
+} Mat3;
 
 /* Create a 4x4 matrix and return a pointer to it. Returns NULL if allocation failed*/
 Matrix* createMatrix();
@@ -24,8 +29,16 @@ Matrix* getIdentityMatrix();
 Matrix* transposeMatrix(const Matrix *m);
 /* Returns the determinant of a 4x4 matrix*/
 float getDeterminant(const Matrix *m);
-
+/* Returns the inverse of the Matrix m*/
+Matrix* inverseMatrix(const Matrix *m);
 void destroyMatrix(Matrix **m);
 
+/*Mat3 related functions here*/
+
+/*Returns a signed determinant of the submatrix made from the matrix m by ommitting the passed in row
+and column.*/
+float getCofactor(const Matrix *m, const int row, const int column);
+Mat3* createMat3();
+void destroyMat3(Mat3 **m3);
 
 # endif

@@ -21,6 +21,19 @@ void createMatrixTest(void **state) {
     assert_null(m);
 }
 
+void createMat3Test(void **state) {
+    (void) state; /* unused */
+
+    Mat3 *m3 = createMat3();
+    for (int x = 0; x < MAT3_SIZE; x++) {
+        for (int y = 0; y < MAT3_SIZE; y++) {
+            assert_float_equal(m3->data[x][y], 0.0, EPSILON);
+        }
+    }
+    destroyMat3(&m3);
+    assert_null(m3);    
+}
+
 void getMatrixCellTest_2(void **state) {
     (void) state; /* unused */
 
@@ -377,7 +390,39 @@ void nonInvertibleDeterminantTest(void ** state) {
     assert_float_equal(getDeterminant(m), -0.0, EPSILON);
     destroyMatrix(&m);
 }
+void getCofactorTest(void ** state) {
+    (void) state; /* unused */
 
+    Matrix *m = createMatrix();
+    m->data[0][0] = -2.0;
+    m->data[0][1] = -8.0;
+    m->data[0][2] = 3.0;
+    m->data[0][3] = 5.0;
+    m->data[1][0] = -3.0;
+    m->data[1][1] = 1.0;
+    m->data[1][2] = 7.0;
+    m->data[1][3] = 3.0;
+    m->data[2][0] = 1.0;
+    m->data[2][1] = 2.0;
+    m->data[2][2] = -9.0;
+    m->data[2][3] = 6.0;
+    m->data[3][0] = -6.0;
+    m->data[3][1] = 7.0;
+    m->data[3][2] = 7.0;
+    m->data[3][3] = -9.0;
+
+    float actual_cofactor00 = 690.0;
+    float actual_cofactor01 = 447;
+    float actual_cofactor02 = 210.0;
+    float actual_cofactor03 = 51.0;
+
+    assert_float_equal(actual_cofactor00, getCofactor(m, 0, 0), EPSILON);
+    assert_float_equal(actual_cofactor01, getCofactor(m, 0, 1), EPSILON);
+    assert_float_equal(actual_cofactor02, getCofactor(m, 0, 2), EPSILON);
+    assert_float_equal(actual_cofactor03, getCofactor(m, 0, 3), EPSILON);
+    destroyMatrix(&m);
+
+}
 void inverseMatrixTest(void ** state) {
     (void) state; /* unused */
 
@@ -400,22 +445,22 @@ void inverseMatrixTest(void ** state) {
     m->data[3][3] = 4.0;
 
     Matrix *res = createMatrix();
-    res->data[0][0] = 0.21805;
-    res->data[0][1] = 0.4115;
-    res->data[0][2] = 0.24060;
-    res->data[0][3] = -0.04511;
-    res->data[1][0] = -0.80827;
-    res->data[1][1] = -1.45677;
-    res->data[1][2] = -0.44361;
-    res->data[1][3] = 0.52068;
-    res->data[2][0] = -0.07895;
-    res->data[2][1] = -0.22368;
-    res->data[2][2] = -0.05263;
-    res->data[2][3] = 0.19737;
-    res->data[3][0] = -0.52256;
-    res->data[3][1] = -0.81391;
-    res->data[3][2] = -0.30075;
-    res->data[3][3] = 0.30639;
+    res->data[0][0] = 0.218045;
+    res->data[0][1] = 0.451128;
+    res->data[0][2] = 0.240602;
+    res->data[0][3] = -0.045113;
+    res->data[1][0] = -0.808271;
+    res->data[1][1] = -1.456767;
+    res->data[1][2] = -0.443609;
+    res->data[1][3] = 0.520677;
+    res->data[2][0] = -0.078947;
+    res->data[2][1] = -0.223684;
+    res->data[2][2] = -0.052632;
+    res->data[2][3] = 0.197368;
+    res->data[3][0] = -0.522556;
+    res->data[3][1] = -0.813910;
+    res->data[3][2] = -0.300752;
+    res->data[3][3] = 0.306391;
 
     assert_true(matricesEqual(inverseMatrix(m), res));
     destroyMatrix(&m);
@@ -426,6 +471,7 @@ void inverseMatrixTest(void ** state) {
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
+        cmocka_unit_test(createMat3Test),
         cmocka_unit_test(getMatrixCellTest_2),
         cmocka_unit_test(matricesEqualTest),
         cmocka_unit_test(matricesNotEqualTest),
@@ -436,6 +482,7 @@ int main() {
         cmocka_unit_test(transposeIdentityTest),
         cmocka_unit_test(getDeterminantTest),
         cmocka_unit_test(nonInvertibleDeterminantTest),
+        cmocka_unit_test(getCofactorTest),
         cmocka_unit_test(inverseMatrixTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);

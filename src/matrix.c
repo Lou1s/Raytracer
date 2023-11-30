@@ -152,13 +152,29 @@ Matrix* inverseMatrix(const Matrix *m) {
     if (inverse == NULL) {
         return NULL;
     }
-    for (int x = 0; x < MAT_SIZE - 1; x++) {
-        for (int y = 0; y < MAT_SIZE - 1; y++) {
+    for (int x = 0; x < MAT_SIZE; x++) {
+        for (int y = 0; y < MAT_SIZE; y++) {
             float cofactor = getCofactor(m, x, y);
             inverse->data[y][x] = cofactor/det;
         }
     }
     return inverse;
+}
+
+void printMatrix(const Matrix *m) {
+    printf("[");
+    for (int x = 0; x < MAT_SIZE; x++) {
+        for (int y = 0; y < MAT_SIZE; y++) {
+            printf("%f", m->data[x][y]);
+            if (y < MAT_SIZE - 1) {
+                printf(" ");
+        }
+        }
+        if (x < MAT_SIZE - 1) {
+            printf("\n");
+        }
+    }
+    printf("]\n");
 }
 
 void destroyMat3(Mat3 **m3) {

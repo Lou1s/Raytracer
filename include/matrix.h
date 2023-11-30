@@ -31,7 +31,10 @@ Matrix* transposeMatrix(const Matrix *m);
 float getDeterminant(const Matrix *m);
 /* Returns the inverse of the Matrix m*/
 Matrix* inverseMatrix(const Matrix *m);
+/*Free a Matrix struct*/
 void destroyMatrix(Matrix **m);
+/* Debug function for printing a *Matrix*/
+void printMatrix(const Matrix *m);
 
 /*Mat3 related functions here*/
 

@@ -378,6 +378,51 @@ void nonInvertibleDeterminantTest(void ** state) {
     destroyMatrix(&m);
 }
 
+void inverseMatrixTest(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *m = createMatrix();
+    m->data[0][0] = -5.0;
+    m->data[0][1] = 2.0;
+    m->data[0][2] = 6.0;
+    m->data[0][3] = -8.0;
+    m->data[1][0] = 1.0;
+    m->data[1][1] = -5.0;
+    m->data[1][2] = 1.0;
+    m->data[1][3] = 8.0;
+    m->data[2][0] = 7.0;
+    m->data[2][1] = 7.0;
+    m->data[2][2] = -6.0;
+    m->data[2][3] = -7.0;
+    m->data[3][0] = 1.0;
+    m->data[3][1] = -3.0;
+    m->data[3][2] = 7.0;
+    m->data[3][3] = 4.0;
+
+    Matrix *res = createMatrix();
+    res->data[0][0] = 0.21805;
+    res->data[0][1] = 0.4115;
+    res->data[0][2] = 0.24060;
+    res->data[0][3] = -0.04511;
+    res->data[1][0] = -0.80827;
+    res->data[1][1] = -1.45677;
+    res->data[1][2] = -0.44361;
+    res->data[1][3] = 0.52068;
+    res->data[2][0] = -0.07895;
+    res->data[2][1] = -0.22368;
+    res->data[2][2] = -0.05263;
+    res->data[2][3] = 0.19737;
+    res->data[3][0] = -0.52256;
+    res->data[3][1] = -0.81391;
+    res->data[3][2] = -0.30075;
+    res->data[3][3] = 0.30639;
+
+    assert_true(matricesEqual(inverseMatrix(m), res));
+    destroyMatrix(&m);
+    destroyMatrix(&res);
+
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
@@ -390,7 +435,8 @@ int main() {
         cmocka_unit_test(transposeMatrixTest),
         cmocka_unit_test(transposeIdentityTest),
         cmocka_unit_test(getDeterminantTest),
-        cmocka_unit_test(nonInvertibleDeterminantTest)
+        cmocka_unit_test(nonInvertibleDeterminantTest),
+        cmocka_unit_test(inverseMatrixTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

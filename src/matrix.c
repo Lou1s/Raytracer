@@ -177,6 +177,18 @@ void printMatrix(const Matrix *m) {
     printf("]\n");
 }
 
+Matrix* getTranslation(const float x, const float y, const float z) {
+    Matrix *transform = getIdentityMatrix();
+    if (transform == NULL) {
+        return NULL;
+    }
+
+    transform->data[0][3] = x;
+    transform->data[1][3] = y;
+    transform->data[2][3] = z;
+    return transform;
+}
+
 void destroyMat3(Mat3 **m3) {
     free(*m3);
     *m3 = NULL;

@@ -36,12 +36,16 @@ void destroyMatrix(Matrix **m);
 /* Debug function for printing a *Matrix*/
 void printMatrix(const Matrix *m);
 
-/*Mat3 related functions here*/
+/*Transforms*/
+Matrix* getTranslation(const float x, const float y, const float z);
+/*Mat3 related functions*/
 
 /*Returns a signed determinant of the submatrix made from the matrix m by ommitting the passed in row
 and column.*/
 float getCofactor(const Matrix *m, const int row, const int column);
+/*Create a 3x3 Matrix*/
 Mat3* createMat3();
+/*Free a 3x3 Matrix*/
 void destroyMat3(Mat3 **m3);
 
 # endif

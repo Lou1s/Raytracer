@@ -469,6 +469,25 @@ void inverseMatrixTest(void ** state) {
 
 }
 
+void testTranslation(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *translate = getTranslation(5.0, -3.0, 2.0);
+    Point p = point(-3.0, 4.0, 5.0);
+    Point translated_p = matTupleMult(translate, p);
+    assert_true(tuplesEqual(translated_p, point(2.0, 1.0, 7.0)));
+    // Translate translated point by the original transforms inverse
+    Matrix *inv_translate = inverseMatrix(translate);
+    assert_true(tuplesEqual(matTupleMult(inv_translate, translated_p), p));
+    // Test that translation does not affect vectors
+    Vector v = vector(-3.0,4.0,5.0);
+    Vector translated_v = matTupleMult(translate, v);
+    assert_true(tuplesEqual(v, translated_v));
+
+    destroyMatrix(&inv_translate);
+    destroyMatrix(&translate);
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createMatrixTest),
@@ -484,7 +503,8 @@ int main() {
         cmocka_unit_test(getDeterminantTest),
         cmocka_unit_test(nonInvertibleDeterminantTest),
         cmocka_unit_test(getCofactorTest),
-        cmocka_unit_test(inverseMatrixTest)
+        cmocka_unit_test(inverseMatrixTest),
+        cmocka_unit_test(testTranslation)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

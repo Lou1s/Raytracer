@@ -13,8 +13,8 @@ typedef struct Tuple {
  } Tuple, Vector, Point;
 
 /* Constructors for vectors (Tuple) {x, y, z, 0.0} and points (Tuple) {x, y, z, 1.0}*/
-Point point(const float x, const float y, const float z);
-Vector vector(const float x, const float y, const float z);
+Point getPoint(const float x, const float y, const float z);
+Vector getVector(const float x, const float y, const float z);
 
 /* Helper function(s) for debugging*/
 void printTuple(const Tuple t);

@@ -31,7 +31,7 @@ static void tupleVectorInitTest(void **state) {
 static void pointInitTest(void **state) {
     (void) state; /* unused */
 
-    Point p = point(3.1, 2.0, 4.0);
+    Point p = getPoint(3.1, 2.0, 4.0);
     Tuple pp = {3.1, 2.0, 4.0, 1.0};
     assert_float_equal(p.w, 1.0, EPSILON);
     assert_true(tuplesEqual(p, pp));
@@ -40,7 +40,7 @@ static void pointInitTest(void **state) {
 static void vectorInitTest(void **state) {
     (void) state; /* unused */
 
-    Vector v = vector(0.1, 0.0, 101.1);
+    Vector v = getVector(0.1, 0.0, 101.1);
     Tuple vv = {0.1, 0.0, 101.1, 0.0};
     assert_float_equal(v.w, 0.0, EPSILON);
     assert_true(tuplesEqual(v, vv));
@@ -62,14 +62,14 @@ static void tuplesEqualTest(void **state) {
 static void negateTupleTest(void **state) {
     (void) state; /* unused */
 
-    Point p = point(1.1, 2.3, -4.0);
+    Point p = getPoint(1.1, 2.3, -4.0);
     Point pp = negateTuple(p);
     assert_float_equal(pp.x, -1.1, EPSILON);
     assert_float_equal(pp.y, -2.3, EPSILON);
     assert_float_equal(pp.z, 4.0, EPSILON);
     assert_float_equal(pp.w, -1.0, EPSILON);
 
-    Vector v = vector(-1.1, -2.3, 4.0);
+    Vector v = getVector(-1.1, -2.3, 4.0);
     Vector vv = negateTuple(v);
     assert_float_equal(vv.x, 1.1, EPSILON);
     assert_float_equal(vv.y, 2.3, EPSILON);
@@ -80,8 +80,8 @@ static void negateTupleTest(void **state) {
 static void addTupleTest(void **state) {
     (void) state; /* unused */
 
-    Vector v = vector(1.0, 2.4, -5.0);
-    Point p = point(3.1, -2.4, -20.0);
+    Vector v = getVector(1.0, 2.4, -5.0);
+    Point p = getPoint(3.1, -2.4, -20.0);
     Tuple sum = addTuples(v, p);
     Tuple expected = {1.0 + 3.1, 2.4 - 2.4, -5.0 - 20.0, 0.0 + 1.0};
     assert_true(tuplesEqual(expected, sum));
@@ -90,8 +90,8 @@ static void addTupleTest(void **state) {
 static void subtractTupleTest(void **state) {
     (void) state; /* unused */
 
-    Vector v = vector(1.0, 2.4, -5.0);
-    Point p = point(3.1, -2.4, -20.0);
+    Vector v = getVector(1.0, 2.4, -5.0);
+    Point p = getPoint(3.1, -2.4, -20.0);
     Tuple diff = subtractTuples(v, p);
     Tuple expected = {1.0 - 3.1, 2.4 + 2.4, -5.0 + 20.0, 0.0 - 1.0};
     assert_true(tuplesEqual(expected, diff));
@@ -118,46 +118,46 @@ static void divideTupleScalarTest(void **state) {
 static void vectorMagnitudeTest(void **state) {
     (void) state; /* unused */
 
-    Vector v = vector(1, 0, 0);
+    Vector v = getVector(1, 0, 0);
     assert_float_equal(vectorMagnitude(v), 1.0, EPSILON);
     
-    Vector v1 = vector(0, 1, 0);
+    Vector v1 = getVector(0, 1, 0);
     assert_float_equal(vectorMagnitude(v1), 1.0, EPSILON);
     
-    Vector v2 = vector(0, 0, 1);
+    Vector v2 = getVector(0, 0, 1);
     assert_float_equal(vectorMagnitude(v2), 1.0, EPSILON);
     
-    Vector v3 = vector(1,2,3);
+    Vector v3 = getVector(1,2,3);
     assert_float_equal(vectorMagnitude(v3), sqrt(14), EPSILON);
     
-    Vector v4 = vector(-1,-2,-3);
+    Vector v4 = getVector(-1,-2,-3);
     assert_float_equal(vectorMagnitude(v4), sqrt(14), EPSILON);
 }
 
 static void vectorNormaliseTest(void **state) {
     (void) state; /* unused */
 
-    Vector v = vector(4,0,0);
-    assert_true(tuplesEqual(vectorNormalise(v), vector(1,0,0)));
-    v = vector(1,2,3);
-    assert_true(tuplesEqual(vectorNormalise(v), vector(1/sqrtf(14),2/sqrtf(14),3/sqrtf(14))));
+    Vector v = getVector(4,0,0);
+    assert_true(tuplesEqual(vectorNormalise(v), getVector(1,0,0)));
+    v = getVector(1,2,3);
+    assert_true(tuplesEqual(vectorNormalise(v), getVector(1/sqrtf(14),2/sqrtf(14),3/sqrtf(14))));
 }
 
 static void dotProdVectorsTest(void **state) {
     (void) state; /* unused */
 
-    Vector a = vector(1, 2, 3);
-    Vector b = vector(2, 3, 4);
+    Vector a = getVector(1, 2, 3);
+    Vector b = getVector(2, 3, 4);
     assert_float_equal(dotProdVectors(a, b), 20.0, EPSILON);
 }
 
 static void crossProductVectorsTest(void **state) {
     (void) state; /* unused */
 
-    Vector a = vector(1, 2, 3);
-    Vector b = vector(2, 3, 4);
-    assert_true(tuplesEqual(crossProductVectors(a, b), vector(-1, 2, -1)));
-    assert_true(tuplesEqual(crossProductVectors(b, a), vector(1, -2, 1)));
+    Vector a = getVector(1, 2, 3);
+    Vector b = getVector(2, 3, 4);
+    assert_true(tuplesEqual(crossProductVectors(a, b), getVector(-1, 2, -1)));
+    assert_true(tuplesEqual(crossProductVectors(b, a), getVector(1, -2, 1)));
 }
 
 int main() {

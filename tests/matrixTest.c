@@ -473,14 +473,14 @@ void testTranslation(void ** state) {
     (void) state; /* unused */
 
     Matrix *translate = getTranslation(5.0, -3.0, 2.0);
-    Point p = point(-3.0, 4.0, 5.0);
+    Point p = getPoint(-3.0, 4.0, 5.0);
     Point translated_p = matTupleMult(translate, p);
-    assert_true(tuplesEqual(translated_p, point(2.0, 1.0, 7.0)));
+    assert_true(tuplesEqual(translated_p, getPoint(2.0, 1.0, 7.0)));
     // Translate translated point by the original transforms inverse
     Matrix *inv_translate = inverseMatrix(translate);
     assert_true(tuplesEqual(matTupleMult(inv_translate, translated_p), p));
     // Test that translation does not affect vectors
-    Vector v = vector(-3.0,4.0,5.0);
+    Vector v = getVector(-3.0,4.0,5.0);
     Vector translated_v = matTupleMult(translate, v);
     assert_true(tuplesEqual(v, translated_v));
 

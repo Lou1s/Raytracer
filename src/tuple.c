@@ -3,12 +3,12 @@
 
 #include "../include/tuple.h"
 
-Point point(const float x, const float y, const float z) {
+Point getPoint(const float x, const float y, const float z) {
     Point p = {x, y, z, 1.0f};
     return p;
 }
 
-Vector vector(const float x, const float y, const float z) {
+Vector getVector(const float x, const float y, const float z) {
     Vector v = {x, y, z, 0.0f};
     return v;
 }
@@ -53,11 +53,11 @@ float vectorMagnitude(const Vector v) {
 
 Vector vectorNormalise(const Vector v) {
     float mag = vectorMagnitude(v);
-    return vector(v.x/mag, v.y/mag, v.z/mag);
+    return getVector(v.x/mag, v.y/mag, v.z/mag);
 }
 
 Vector crossProductVectors(const Vector a, const Vector b) {
-    return vector(a.y * b.z - a.z * b.y,
+    return getVector(a.y * b.z - a.z * b.y,
                   a.z * b.x - a.x * b.z,
                   a.x * b.y - a.y * b.x);
 }

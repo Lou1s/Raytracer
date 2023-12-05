@@ -37,7 +37,12 @@ void destroyMatrix(Matrix **m);
 void printMatrix(const Matrix *m);
 
 /*Transforms*/
-Matrix* getTranslation(const float x, const float y, const float z);
+/*Translation Matrix*/
+Matrix* getTranslationMat(const float x, const float y, const float z);
+/*Scale Matrix*/
+Matrix* getScaleMat(const float x, const float y, const float z);
+
+
 /*Mat3 related functions*/
 
 /*Returns a signed determinant of the submatrix made from the matrix m by ommitting the passed in row

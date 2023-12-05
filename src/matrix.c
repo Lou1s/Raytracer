@@ -177,7 +177,7 @@ void printMatrix(const Matrix *m) {
     printf("]\n");
 }
 
-Matrix* getTranslation(const float x, const float y, const float z) {
+Matrix* getTranslationMat(const float x, const float y, const float z) {
     Matrix *transform = getIdentityMatrix();
     if (transform == NULL) {
         return NULL;
@@ -186,6 +186,18 @@ Matrix* getTranslation(const float x, const float y, const float z) {
     transform->data[0][3] = x;
     transform->data[1][3] = y;
     transform->data[2][3] = z;
+    return transform;
+}
+
+Matrix* getScaleMat(const float x, const float y, const float z) {
+    Matrix *transform = getIdentityMatrix();
+    if (transform == NULL) {
+        return NULL;
+    }
+
+    transform->data[0][0] = x;
+    transform->data[1][1] = y;
+    transform->data[2][2] = z;
     return transform;
 }
 

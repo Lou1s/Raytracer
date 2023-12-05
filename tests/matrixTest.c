@@ -472,7 +472,7 @@ void inverseMatrixTest(void ** state) {
 void testTranslation(void ** state) {
     (void) state; /* unused */
 
-    Matrix *translate = getTranslation(5.0, -3.0, 2.0);
+    Matrix *translate = getTranslationMat(5.0, -3.0, 2.0);
     Point p = getPoint(-3.0, 4.0, 5.0);
     Point translated_p = matTupleMult(translate, p);
     assert_true(tuplesEqual(translated_p, getPoint(2.0, 1.0, 7.0)));
@@ -486,6 +486,21 @@ void testTranslation(void ** state) {
 
     destroyMatrix(&inv_translate);
     destroyMatrix(&translate);
+}
+
+// void testRotation(void ** state) {
+//     (void) state; /* unused */
+
+//     Matrix *rot = getRotation(
+// }
+
+void testScale(void ** state) {
+    (void) state; /* unused */
+
+    Matrix *scale = getScaleMat(-1.0,1.0,1.0);
+    Point p = getPoint(2.0, 3.0, 4.0);
+    assert_true(tuplesEqual(getPoint(-2.0, 3.0, 4.0), matTupleMult(scale, p)));
+    destroyMatrix(&scale);
 }
 
 int main() {
@@ -504,7 +519,8 @@ int main() {
         cmocka_unit_test(nonInvertibleDeterminantTest),
         cmocka_unit_test(getCofactorTest),
         cmocka_unit_test(inverseMatrixTest),
-        cmocka_unit_test(testTranslation)
+        cmocka_unit_test(testTranslation),
+        cmocka_unit_test(testScale)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

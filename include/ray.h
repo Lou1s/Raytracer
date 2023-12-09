@@ -8,9 +8,12 @@ typedef struct Ray {
     Vector direction;
 } Ray;
 
-/*Get a Ray with orition of (0,0,0) and a direction of (0,0,0)*/
+/* Get a Ray with orition of (0,0,0) and a direction of (0,0,0)*/
 Ray* initRay();
 /* Returns a Ray with the supplied direction and origin*/
 Ray* getRay(const Point origin, const Vector direction);
+
+/* Free a Ray from memory*/
+void destroyRay(Ray **r);
 
 #endif

@@ -243,6 +243,46 @@ Matrix* getRotationZ(const float rot) {
     return rot_mat;
 }
 
+Tuple translate(const Tuple t, const float x, const float y, const float z) {
+    Matrix *translate_mat = getTranslationMat(x, y, z);
+    assert(translate_mat != NULL);
+    Tuple translated_t = matTupleMult(translate_mat, t);
+    destroyMatrix(&translate_mat);
+    return translated_t;
+}
+
+Tuple scale(const Tuple t, const float x, const float y, const float z) {
+    Matrix *scale_mat = getScaleMat(x, y, z);
+    assert(scale_mat != NULL);
+    Tuple scale_t = matTupleMult(scale_mat, t);
+    destroyMatrix(&scale_mat);
+    return scale_t;
+}
+
+Tuple rotateX(const Tuple t, const float rot) {
+    Matrix *rot_mat = getRotationX(rot);
+    assert(rot_mat != NULL);
+    Tuple rot_t = matTupleMult(rot_mat, t);
+    destroyMatrix(&rot_mat);
+    return rot_t;
+}
+
+Tuple rotateY(const Tuple t, const float rot) {
+    Matrix *rot_mat = getRotationY(rot);
+    assert(rot_mat != NULL);
+    Tuple rot_t = matTupleMult(rot_mat, t);
+    destroyMatrix(&rot_mat);
+    return rot_t;
+}
+
+Tuple rotateZ(const Tuple t, const float rot) {
+    Matrix *rot_mat = getRotationZ(rot);
+    assert(rot_mat != NULL);
+    Tuple rot_t = matTupleMult(rot_mat, t);
+    destroyMatrix(&rot_mat);
+    return rot_t;
+}
+
 void destroyMat3(Mat3 **m3) {
     free(*m3);
     *m3 = NULL;

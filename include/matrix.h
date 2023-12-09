@@ -47,6 +47,18 @@ Matrix* getRotationX(const float rot);
 Matrix* getRotationY(const float rot);
 /*Rotation around the Z axis, in radians*/
 Matrix* getRotationZ(const float rot);
+/*Helper functions for all transforms that apply the transform then return the Tuple, without needing
+to handle a matrix at all*/
+/*Returns translated Tuple*/
+Tuple translate(const Tuple t, const float x, const float y, const float z);
+/* Returns a scaled Tuple*/
+Tuple scale(const Tuple t, const float x, const float y, const float z);
+/*Returun a tuple rotated around x by 'rot' radians*/
+Tuple rotateX(const Tuple t, const float rot);
+/*Returun a tuple rotated around y by 'rot' radians*/
+Tuple rotateY(const Tuple t, const float rot);
+/*Returun a tuple rotated around z by 'rot' radians*/
+Tuple rotateZ(const Tuple t, const float rot);
 
 /*Mat3 related functions*/
 /*Returns a signed determinant of the submatrix made from the matrix m by ommitting the passed in row

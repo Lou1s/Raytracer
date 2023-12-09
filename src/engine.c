@@ -17,7 +17,7 @@ int engineInit(int width, int height) {
 }
 
 int engineMainLoop() {
-     return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 

@@ -499,6 +499,7 @@ void rotationXTest(void ** state) {
             getPoint(0.0 , sqrtf(2.0)/2.0, sqrtf(2.0)/2.0)));
     assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
         getPoint(0.0 , 0.0, 1.0)));
+    assert_true(tuplesEqual(getPoint(0.0 , 0.0, 1.0), rotateX(p, M_PI/2.0)));
     
     destroyMatrix(&rot_half_quart);
     destroyMatrix(&rot_full_quart);
@@ -513,7 +514,8 @@ void rotationYTest(void ** state) {
             getPoint(sqrtf(2.0)/2.0, 0.0, sqrtf(2.0)/2.0)));
     assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
         getPoint(1.0 , 0.0, 0.0)));
-    
+    assert_true(tuplesEqual(getPoint(1.0 , 0.0, 0.0), rotateY(p, M_PI/2.0)));
+
     destroyMatrix(&rot_half_quart);
     destroyMatrix(&rot_full_quart);
 }
@@ -521,13 +523,14 @@ void rotationZTest(void ** state) {
     (void) state; /* unused */
 
     Point p = getPoint(0.0, 1.0, 0.0);
-    Matrix *rot_half_quart = getRotationZ(M_PI/4);
-    Matrix *rot_full_quart = getRotationZ(M_PI/2);
+    Matrix *rot_half_quart = getRotationZ(M_PI/4.0);
+    Matrix *rot_full_quart = getRotationZ(M_PI/2.0);
     assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
             getPoint(-sqrtf(2.0)/2.0, sqrtf(2.0)/2.0, 0.0)));
     assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
         getPoint(-1.0 , 0.0, 0.0)));
     
+    assert_true(tuplesEqual(getPoint(-1.0 , 0.0, 0.0), rotateZ(p, M_PI/2.0)));
     destroyMatrix(&rot_half_quart);
     destroyMatrix(&rot_full_quart);
 }

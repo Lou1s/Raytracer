@@ -21,7 +21,7 @@ bool matricesEqual(const Matrix *m1, const Matrix *m2);
 /* Matrix multiplication, in the order of m1 * m2 (this matters!)*/
 Matrix* multMatrix(const Matrix *m1, const Matrix *m2);
 /* Matrix vecotr mult, can be seen as a specific case of the multMatrix function*/
-Tuple matTupleMult(const Matrix *m, Tuple v);
+Tuple matTupleMult(const Matrix *m, Tuple t);
 
 /* Returns a 4x4 identity matrix*/
 Matrix* getIdentityMatrix();
@@ -42,11 +42,14 @@ Matrix* getTranslationMat(const float x, const float y, const float z);
 /*Scale Matrix*/
 Matrix* getScaleMat(const float x, const float y, const float z);
 /*Rotation around the X axis, in radians*/
-Matrix* getRotationX(const float rot);
+Matrix* getRotationXMat(const float rot);
 /*Rotation around the Y axis, in radians*/
-Matrix* getRotationY(const float rot);
+Matrix* getRotationYMat(const float rot);
 /*Rotation around the Z axis, in radians*/
-Matrix* getRotationZ(const float rot);
+Matrix* getRotationZMat(const float rot);
+/*Returns a shear transform Matrix*/
+Matrix* getShearMat(const float x_y, const float x_z, const float y_x, const float y_z, 
+        const float z_x, const float z_y);
 /*Helper functions for all transforms that apply the transform then return the Tuple, without needing
 to handle a matrix at all*/
 /*Returns translated Tuple*/
@@ -59,6 +62,9 @@ Tuple rotateX(const Tuple t, const float rot);
 Tuple rotateY(const Tuple t, const float rot);
 /*Returun a tuple rotated around z by 'rot' radians*/
 Tuple rotateZ(const Tuple t, const float rot);
+/*Returns a sheared tuple*/
+Tuple shear(Tuple t, const float x_y, const float x_z, const float y_x, const float y_z, 
+        const float z_x, const float z_y);
 
 /*Mat3 related functions*/
 /*Returns a signed determinant of the submatrix made from the matrix m by ommitting the passed in row

@@ -64,11 +64,11 @@ static float* getTupleValByIndex(Tuple *t, const int index) {
     assert(0);
 }
 
-Tuple matTupleMult(const Matrix *m, Tuple v) {
+Tuple matTupleMult(const Matrix *m, Tuple t) {
     Tuple result = {0.0, 0.0, 0.0, 0.0};
     for (int i = 0; i < MAT_SIZE; i++) {
         for (int y = 0; y < MAT_SIZE; y++) {
-            *getTupleValByIndex(&result, i) += m->data[i][y] * (*getTupleValByIndex(&v, y));
+            *getTupleValByIndex(&result, i) += m->data[i][y] * (*getTupleValByIndex(&t, y));
         }
     }
     return result;    
@@ -201,7 +201,7 @@ Matrix* getScaleMat(const float x, const float y, const float z) {
     return transform;
 }
 
-Matrix* getRotationX(const float rot) {
+Matrix* getRotationXMat(const float rot) {
     Matrix *rot_mat = getIdentityMatrix();
     if (rot_mat == NULL) {
         return NULL;
@@ -215,7 +215,7 @@ Matrix* getRotationX(const float rot) {
     return rot_mat;
 }
 
-Matrix* getRotationY(const float rot) {
+Matrix* getRotationYMat(const float rot) {
     Matrix *rot_mat = getIdentityMatrix();
     if (rot_mat == NULL) {
         return NULL;
@@ -229,7 +229,7 @@ Matrix* getRotationY(const float rot) {
     return rot_mat;
 }
 
-Matrix* getRotationZ(const float rot) {
+Matrix* getRotationZMat(const float rot) {
     Matrix *rot_mat = getIdentityMatrix();
     if (rot_mat == NULL) {
         return NULL;
@@ -241,6 +241,33 @@ Matrix* getRotationZ(const float rot) {
     rot_mat->data[1][1] = cos(rot);
 
     return rot_mat;
+}
+
+Matrix* getShearMat(const float x_y, const float x_z, const float y_x, const float y_z, 
+        const float z_x, const float z_y) {
+    Matrix *shear_mat = getIdentityMatrix();
+    if (shear_mat == NULL) {
+        return NULL;
+    }
+
+    shear_mat->data[0][1] = x_y;
+    shear_mat->data[0][2] = x_z;
+    shear_mat->data[1][0] = y_x;
+    shear_mat->data[1][2] = y_z;
+    shear_mat->data[2][0] = z_x;
+    shear_mat->data[2][1] = z_y;
+
+    return shear_mat;
+}
+
+Tuple shear(Tuple t, const float x_y, const float x_z, const float y_x, const float y_z, 
+        const float z_x, const float z_y) {
+    Matrix *shear_mat = getShearMat(x_y, x_z, y_x, y_z, z_x, z_y);
+    assert(shear_mat != NULL);
+    Tuple sheared_t = matTupleMult(shear_mat, t);
+    destroyMatrix(&shear_mat);
+    
+    return sheared_t;
 }
 
 Tuple translate(const Tuple t, const float x, const float y, const float z) {
@@ -260,7 +287,7 @@ Tuple scale(const Tuple t, const float x, const float y, const float z) {
 }
 
 Tuple rotateX(const Tuple t, const float rot) {
-    Matrix *rot_mat = getRotationX(rot);
+    Matrix *rot_mat = getRotationXMat(rot);
     assert(rot_mat != NULL);
     Tuple rot_t = matTupleMult(rot_mat, t);
     destroyMatrix(&rot_mat);
@@ -268,7 +295,7 @@ Tuple rotateX(const Tuple t, const float rot) {
 }
 
 Tuple rotateY(const Tuple t, const float rot) {
-    Matrix *rot_mat = getRotationY(rot);
+    Matrix *rot_mat = getRotationYMat(rot);
     assert(rot_mat != NULL);
     Tuple rot_t = matTupleMult(rot_mat, t);
     destroyMatrix(&rot_mat);
@@ -276,7 +303,7 @@ Tuple rotateY(const Tuple t, const float rot) {
 }
 
 Tuple rotateZ(const Tuple t, const float rot) {
-    Matrix *rot_mat = getRotationZ(rot);
+    Matrix *rot_mat = getRotationZMat(rot);
     assert(rot_mat != NULL);
     Tuple rot_t = matTupleMult(rot_mat, t);
     destroyMatrix(&rot_mat);

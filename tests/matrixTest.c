@@ -473,28 +473,29 @@ void inverseMatrixTest(void ** state) {
 void translationTest(void ** state) {
     (void) state; /* unused */
 
-    Matrix *translate = getTranslationMat(5.0, -3.0, 2.0);
+    Matrix *translate_m = getTranslationMat(5.0, -3.0, 2.0);
     Point p = getPoint(-3.0, 4.0, 5.0);
-    Point translated_p = matTupleMult(translate, p);
+    Point translated_p = matTupleMult(translate_m, p);
     assert_true(tuplesEqual(translated_p, getPoint(2.0, 1.0, 7.0)));
+    assert_true(tuplesEqual(translated_p, translate(p, 5.0, -3.0, 2.0)));
     // Translate translated point by the original transforms inverse
-    Matrix *inv_translate = inverseMatrix(translate);
+    Matrix *inv_translate = inverseMatrix(translate_m);
     assert_true(tuplesEqual(matTupleMult(inv_translate, translated_p), p));
     // Test that translation does not affect vectors
     Vector v = getVector(-3.0,4.0,5.0);
-    Vector translated_v = matTupleMult(translate, v);
+    Vector translated_v = matTupleMult(translate_m, v);
     assert_true(tuplesEqual(v, translated_v));
 
     destroyMatrix(&inv_translate);
-    destroyMatrix(&translate);
+    destroyMatrix(&translate_m);
 }
 
 void rotationXTest(void ** state) {
     (void) state; /* unused */
 
     Point p = getPoint(0.0, 1.0, 0.0);
-    Matrix *rot_half_quart = getRotationX(M_PI/4.0);
-    Matrix *rot_full_quart = getRotationX(M_PI/2.0);
+    Matrix *rot_half_quart = getRotationXMat(M_PI/4.0);
+    Matrix *rot_full_quart = getRotationXMat(M_PI/2.0);
     assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
             getPoint(0.0 , sqrtf(2.0)/2.0, sqrtf(2.0)/2.0)));
     assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
@@ -508,8 +509,8 @@ void rotationYTest(void ** state) {
     (void) state; /* unused */
     
     Point p = getPoint(0.0, 0.0, 1.0);
-    Matrix *rot_half_quart = getRotationY(M_PI/4);
-    Matrix *rot_full_quart = getRotationY(M_PI/2);
+    Matrix *rot_half_quart = getRotationYMat(M_PI/4);
+    Matrix *rot_full_quart = getRotationYMat(M_PI/2);
     assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
             getPoint(sqrtf(2.0)/2.0, 0.0, sqrtf(2.0)/2.0)));
     assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
@@ -523,8 +524,8 @@ void rotationZTest(void ** state) {
     (void) state; /* unused */
 
     Point p = getPoint(0.0, 1.0, 0.0);
-    Matrix *rot_half_quart = getRotationZ(M_PI/4.0);
-    Matrix *rot_full_quart = getRotationZ(M_PI/2.0);
+    Matrix *rot_half_quart = getRotationZMat(M_PI/4.0);
+    Matrix *rot_full_quart = getRotationZMat(M_PI/2.0);
     assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
             getPoint(-sqrtf(2.0)/2.0, sqrtf(2.0)/2.0, 0.0)));
     assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
@@ -538,11 +539,25 @@ void rotationZTest(void ** state) {
 void scaleTest(void ** state) {
     (void) state; /* unused */
 
-    Matrix *scale = getScaleMat(-1.0,1.0,1.0);
+    Matrix *scale_m = getScaleMat(-1.0,1.0,1.0);
     Point p = getPoint(2.0, 3.0, 4.0);
-    assert_true(tuplesEqual(getPoint(-2.0, 3.0, 4.0), matTupleMult(scale, p)));
-    destroyMatrix(&scale);
+    assert_true(tuplesEqual(getPoint(-2.0, 3.0, 4.0), matTupleMult(scale_m, p)));
+    assert_true(tuplesEqual(getPoint(-2.0, 3.0, 4.0), scale(p, -1.0, 1.0, 1.0)));
+    destroyMatrix(&scale_m);
 }
+
+void shearTest(void ** state) {
+    (void) state; /* unused */
+
+    Point p = getPoint(2, 3, 4);
+    assert_true(tuplesEqual(getPoint(5, 3, 4), shear(p, 1,0,0,0,0,0)));
+    assert_true(tuplesEqual(getPoint(6, 3, 4), shear(p, 0,1,0,0,0,0)));
+    assert_true(tuplesEqual(getPoint(2, 5, 4), shear(p, 0,0,1,0,0,0)));
+    assert_true(tuplesEqual(getPoint(2, 7, 4), shear(p, 0,0,0,1,0,0)));
+    assert_true(tuplesEqual(getPoint(2, 3, 6), shear(p, 0,0,0,0,1,0)));
+    assert_true(tuplesEqual(getPoint(2, 3, 7), shear(p, 0,0,0,0,0,1)));
+}
+
 
 int main() {
     const struct CMUnitTest tests[] = {
@@ -564,7 +579,8 @@ int main() {
         cmocka_unit_test(scaleTest),
         cmocka_unit_test(rotationXTest),
         cmocka_unit_test(rotationYTest),
-        cmocka_unit_test(rotationZTest)
+        cmocka_unit_test(rotationZTest),
+        cmocka_unit_test(shearTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

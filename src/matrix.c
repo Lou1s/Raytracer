@@ -201,6 +201,48 @@ Matrix* getScaleMat(const float x, const float y, const float z) {
     return transform;
 }
 
+Matrix* getRotationX(const float rot) {
+    Matrix *rot_mat = getIdentityMatrix();
+    if (rot_mat == NULL) {
+        return NULL;
+    }
+
+    rot_mat->data[1][1] = cos(rot);
+    rot_mat->data[1][2] = -sin(rot);
+    rot_mat->data[2][1] = sin(rot);
+    rot_mat->data[2][2] = cos(rot);
+
+    return rot_mat;
+}
+
+Matrix* getRotationY(const float rot) {
+    Matrix *rot_mat = getIdentityMatrix();
+    if (rot_mat == NULL) {
+        return NULL;
+    }
+
+    rot_mat->data[0][0] = cos(rot);
+    rot_mat->data[0][2] = sin(rot);
+    rot_mat->data[2][0] = -sin(rot);
+    rot_mat->data[2][2] = cos(rot);
+
+    return rot_mat;
+}
+
+Matrix* getRotationZ(const float rot) {
+    Matrix *rot_mat = getIdentityMatrix();
+    if (rot_mat == NULL) {
+        return NULL;
+    }
+
+    rot_mat->data[0][0] = cos(rot);
+    rot_mat->data[0][1] = -sin(rot);
+    rot_mat->data[1][0] = sin(rot);
+    rot_mat->data[1][1] = cos(rot);
+
+    return rot_mat;
+}
+
 void destroyMat3(Mat3 **m3) {
     free(*m3);
     *m3 = NULL;

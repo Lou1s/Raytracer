@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "tuple.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stddef.h>
@@ -469,7 +470,7 @@ void inverseMatrixTest(void ** state) {
 
 }
 
-void testTranslation(void ** state) {
+void translationTest(void ** state) {
     (void) state; /* unused */
 
     Matrix *translate = getTranslationMat(5.0, -3.0, 2.0);
@@ -488,13 +489,50 @@ void testTranslation(void ** state) {
     destroyMatrix(&translate);
 }
 
-// void testRotation(void ** state) {
-//     (void) state; /* unused */
+void rotationXTest(void ** state) {
+    (void) state; /* unused */
 
-//     Matrix *rot = getRotation(
-// }
+    Point p = getPoint(0.0, 1.0, 0.0);
+    Matrix *rot_half_quart = getRotationX(M_PI/4.0);
+    Matrix *rot_full_quart = getRotationX(M_PI/2.0);
+    assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
+            getPoint(0.0 , sqrtf(2.0)/2.0, sqrtf(2.0)/2.0)));
+    assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
+        getPoint(0.0 , 0.0, 1.0)));
+    
+    destroyMatrix(&rot_half_quart);
+    destroyMatrix(&rot_full_quart);
+}
+void rotationYTest(void ** state) {
+    (void) state; /* unused */
+    
+    Point p = getPoint(0.0, 0.0, 1.0);
+    Matrix *rot_half_quart = getRotationY(M_PI/4);
+    Matrix *rot_full_quart = getRotationY(M_PI/2);
+    assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
+            getPoint(sqrtf(2.0)/2.0, 0.0, sqrtf(2.0)/2.0)));
+    assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
+        getPoint(1.0 , 0.0, 0.0)));
+    
+    destroyMatrix(&rot_half_quart);
+    destroyMatrix(&rot_full_quart);
+}
+void rotationZTest(void ** state) {
+    (void) state; /* unused */
 
-void testScale(void ** state) {
+    Point p = getPoint(0.0, 1.0, 0.0);
+    Matrix *rot_half_quart = getRotationZ(M_PI/4);
+    Matrix *rot_full_quart = getRotationZ(M_PI/2);
+    assert_true(tuplesEqual(matTupleMult(rot_half_quart, p), 
+            getPoint(-sqrtf(2.0)/2.0, sqrtf(2.0)/2.0, 0.0)));
+    assert_true(tuplesEqual(matTupleMult(rot_full_quart, p), 
+        getPoint(-1.0 , 0.0, 0.0)));
+    
+    destroyMatrix(&rot_half_quart);
+    destroyMatrix(&rot_full_quart);
+}
+
+void scaleTest(void ** state) {
     (void) state; /* unused */
 
     Matrix *scale = getScaleMat(-1.0,1.0,1.0);
@@ -519,8 +557,11 @@ int main() {
         cmocka_unit_test(nonInvertibleDeterminantTest),
         cmocka_unit_test(getCofactorTest),
         cmocka_unit_test(inverseMatrixTest),
-        cmocka_unit_test(testTranslation),
-        cmocka_unit_test(testScale)
+        cmocka_unit_test(translationTest),
+        cmocka_unit_test(scaleTest),
+        cmocka_unit_test(rotationXTest),
+        cmocka_unit_test(rotationYTest),
+        cmocka_unit_test(rotationZTest)
     };
     return cmocka_run_group_tests_name("matrixTest", tests, NULL, NULL);
 }

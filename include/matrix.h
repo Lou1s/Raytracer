@@ -41,10 +41,14 @@ void printMatrix(const Matrix *m);
 Matrix* getTranslationMat(const float x, const float y, const float z);
 /*Scale Matrix*/
 Matrix* getScaleMat(const float x, const float y, const float z);
-
+/*Rotation around the X axis, in radians*/
+Matrix* getRotationX(const float rot);
+/*Rotation around the Y axis, in radians*/
+Matrix* getRotationY(const float rot);
+/*Rotation around the Z axis, in radians*/
+Matrix* getRotationZ(const float rot);
 
 /*Mat3 related functions*/
-
 /*Returns a signed determinant of the submatrix made from the matrix m by ommitting the passed in row
 and column.*/
 float getCofactor(const Matrix *m, const int row, const int column);

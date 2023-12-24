@@ -12,7 +12,8 @@ typedef struct Ray {
 Ray* initRay();
 /* Returns a Ray with the supplied direction and origin*/
 Ray* getRay(const Point origin, const Vector direction);
-
+/* Get ray position at time t */
+Point getRayPosition(const Ray *ray, float time);
 /* Free a Ray from memory*/
 void destroyRay(Ray **r);
 

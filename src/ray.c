@@ -1,4 +1,5 @@
 #include "ray.h"
+#include "tuple.h"
 #include <stdlib.h>
 Ray* initRay() {
     Ray *ray = malloc(sizeof(Ray));
@@ -20,7 +21,10 @@ Ray* getRay(const Point origin, const Vector direction) {
     ray->direction = direction;
     return ray;
 }
-
+Point getRayPosition(const Ray *ray, float time) {
+    // origin + direction * time
+    return addTuples(ray->origin,  multTupleScalar(ray->direction, time));
+}
 void destroyRay(Ray **r) {
     free(*r);
     *r = NULL;

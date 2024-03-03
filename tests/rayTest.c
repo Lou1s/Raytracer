@@ -1,4 +1,6 @@
 #include "ray.h"
+#include "constants.h"
+#include "sphere.h"
 #include "tuple.h"
 
 #include <stdio.h>
@@ -35,10 +37,92 @@ void testRayPosition(void **state) {
 
 }
 
+void testIntersectionSphere1(void **state) {
+    (void) state; /* unused */
+
+    Ray *r = getRay(getPoint(0,0,-5), getVector(0,0,1));
+    Sphere *s = initSphere();
+
+    Intersection *i = intersectsSphere(r, s);
+    assert_int_equal(i->count, 2);
+    assert_float_equal(i->locations[0], 4.0, EPSILON);
+    assert_float_equal(i->locations[1], 6.0, EPSILON);
+
+    destroyRay(&r);
+    destroySphere(&s);
+    destroyIntersection(&i);
+}
+
+void testIntersectionSphere2(void **state) {
+    (void) state; /* unused */
+
+    Ray *r = getRay(getPoint(0,1,-5), getVector(0,0,1));
+    Sphere *s = initSphere();
+
+    Intersection *i = intersectsSphere(r, s);
+    assert_int_equal(i->count, 1);
+    assert_float_equal(i->locations[0], 5.0, EPSILON);
+
+    destroyRay(&r);
+    destroySphere(&s);
+    destroyIntersection(&i);
+}
+
+void testIntersectionSphere3(void **state) {
+    (void) state; /* unused */
+
+    Ray *r = getRay(getPoint(0,2,-5), getVector(0,0,1));
+    Sphere *s = initSphere();
+
+    Intersection *i = intersectsSphere(r, s);
+    assert_int_equal(i->count, 0);
+
+    destroyRay(&r);
+    destroySphere(&s);
+    destroyIntersection(&i);
+}
+
+void testIntersectionSphere4(void **state) {
+    (void) state; /* unused */
+
+    Ray *r = getRay(getPoint(0,0,0), getVector(0,0,1));
+    Sphere *s = initSphere();
+
+    Intersection *i = intersectsSphere(r, s);
+    assert_int_equal(i->count, 2);
+    assert_float_equal(i->locations[0], -1.0, EPSILON);
+    assert_float_equal(i->locations[1], 1.0, EPSILON);
+
+    destroyRay(&r);
+    destroySphere(&s);
+    destroyIntersection(&i);
+}
+
+void testIntersectionSphere5(void **state) {
+    (void) state; /* unused */
+
+    Ray *r = getRay(getPoint(0,0,5), getVector(0,0,1));
+    Sphere *s = initSphere();
+
+    Intersection *i = intersectsSphere(r, s);
+    assert_int_equal(i->count, 2);
+    assert_float_equal(i->locations[0], -6.0, EPSILON);
+    assert_float_equal(i->locations[1], -4.0, EPSILON);
+    
+    destroyRay(&r);
+    destroySphere(&s);
+    destroyIntersection(&i);
+}
+
 int main() {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(createDestroyRayTest),
-        cmocka_unit_test(testRayPosition)
+        cmocka_unit_test(testRayPosition),
+        cmocka_unit_test(testIntersectionSphere1),
+        cmocka_unit_test(testIntersectionSphere2),
+        cmocka_unit_test(testIntersectionSphere3),
+        cmocka_unit_test(testIntersectionSphere4),
+        cmocka_unit_test(testIntersectionSphere5)
     };
     return cmocka_run_group_tests_name("rayTests", tests, NULL, NULL);
 }

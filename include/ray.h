@@ -36,8 +36,4 @@ Intersections* intersectsSphere(const Ray *r, const Sphere *s);
 void destroyIntersections(Intersections **Intersections);
 /* Free a Ray from memory*/
 void destroyRay(Ray **r);
-
-// TODOOOOOOOOOOOO JUST MAKE SIMPLE INTERSECTION STRUCT? THAT HOLDS t and object id? OR KEEP as GROUP??
-// I Guess we will have intersectionssss and intersection. so may as well make both now
-
 #endif

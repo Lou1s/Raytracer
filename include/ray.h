@@ -14,10 +14,15 @@ points in the form of the distance from the origin of the ray (along the directi
 ids of the objects the ray hit in the order of locations.
 */
 typedef struct Intersection {
-    size_t count;
-    float* locations;
-    int* ids;
+    size_t object;
+    float t;
 } Intersection;
+
+/* Holds an array of intersections*/
+typedef struct Intersections {
+    size_t count;
+    Intersection *data;
+} Intersections;
 
 /* Get a Ray with orition of (0,0,0) and a direction of (0,0,0)*/
 Ray* initRay();
@@ -25,11 +30,14 @@ Ray* initRay();
 Ray* getRay(const Point origin, const Vector direction);
 /* Get ray position at time t */
 Point getRayPosition(const Ray *ray, float time);
-/* Get all intersection points between a ray and a sphere*/
-Intersection* intersectsSphere(const Ray *r, const Sphere *s);
-/* Free an Intersection from memory*/
-void destroyIntersection(Intersection **intersection);
+/* Get all Intersections points between a ray and a sphere*/
+Intersections* intersectsSphere(const Ray *r, const Sphere *s);
+/* Free an Intersections from memory*/
+void destroyIntersections(Intersections **Intersections);
 /* Free a Ray from memory*/
 void destroyRay(Ray **r);
+
+// TODOOOOOOOOOOOO JUST MAKE SIMPLE INTERSECTION STRUCT? THAT HOLDS t and object id? OR KEEP as GROUP??
+// I Guess we will have intersectionssss and intersection. so may as well make both now
 
 #endif

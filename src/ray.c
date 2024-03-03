@@ -31,16 +31,29 @@ Point getRayPosition(const Ray *ray, float time) {
     return addTuples(ray->origin,  multTupleScalar(ray->direction, time));
 }
 
-Intersection* getIntersection(const size_t count, const float locations[]) {
-    Intersection *i = malloc(sizeof(Intersection) + count * sizeof(float));
+static Intersection* getIntersection(const size_t count, const float locations[], const int ids[]) {
+    Intersection *i = malloc(sizeof(Intersection));
     if (i==NULL) {
         return NULL;
     }
+
+    i->locations = malloc(count * sizeof(float));
+    if (i->locations == NULL) {
+        free(i);
+        return NULL;
+    }
+
+    i->ids = malloc(count * sizeof(size_t));
+    if (i->locations == NULL) {
+        free(i->locations);
+        free(i);
+        return NULL;
+    }
+
     i->count = count;
-    memcpy(i->locations, locations, count*sizeof(float));
+    memcpy(i->locations, locations, count * sizeof(float));
+    memcpy(i->ids, ids, count * sizeof(float));
     return i;
-
-
 }
 
 static Intersection* initIntersection() {
@@ -69,11 +82,13 @@ Intersection* intersectsSphere(const Ray *r, const Sphere *s) {
 
     if (floatEqual(t1, t2)) {
         float loc[1] = {t1};
-        return getIntersection(1, loc);
+        int ids[1] = {s->id};
+        return getIntersection(1, loc, ids);
     }
 
+    int ids[2] = {s->id};
     float loc[2] = {t1, t2};
-    return getIntersection(2, loc);
+    return getIntersection(2, loc, ids);
 }
 
 void destroyIntersection(Intersection **intersection) {

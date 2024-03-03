@@ -8,12 +8,15 @@ typedef struct Ray {
     Point origin;
     Vector direction;
 } Ray;
-
-// Simple struct for holding intersection between a ray and a shape. locations lists all intersection
-// points in the form of distance from the origin of the ray used to compute the intersection.
+/*
+Simple struct for holding intersection between a ray and a shape. locations lists all intersection
+points in the form of the distance from the origin of the ray (along the direction). ids lists the
+ids of the objects the ray hit in the order of locations.
+*/
 typedef struct Intersection {
     size_t count;
-    float locations[];
+    float* locations;
+    int* ids;
 } Intersection;
 
 /* Get a Ray with orition of (0,0,0) and a direction of (0,0,0)*/
@@ -22,8 +25,6 @@ Ray* initRay();
 Ray* getRay(const Point origin, const Vector direction);
 /* Get ray position at time t */
 Point getRayPosition(const Ray *ray, float time);
-/*Generate an intersection struct with the given size and location (t values on the ray) array*/
-Intersection* getIntersection(const size_t count, const float locations[]);
 /* Get all intersection points between a ray and a sphere*/
 Intersection* intersectsSphere(const Ray *r, const Sphere *s);
 /* Free an Intersection from memory*/
